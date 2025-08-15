@@ -1,0 +1,12 @@
+java -Xmx32G -jar pXg.v2.4.4.jar \
+    --psm MD55A3_IFN_1.mztab \
+    --bam MD55A3_IFN_1.bam,MD55A3_IFN_2.bam \
+    --gtf gencode.v47.basic.annotation.gtf \
+    --fasta UP000005640.crap.fasta \
+    --aa_variant aa_variant_table.tsv \
+    --peptide_index 2 \
+    --identifier_index 15 \
+    --charge_index 12 \
+    --score_index 9 \
+    --threads 4 \
+    --output MD55A3_IFN_1
