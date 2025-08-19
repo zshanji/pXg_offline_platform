@@ -58,6 +58,15 @@
       padding-top: 0;
       padding-bottom: 0;
     }
+    .plot-box1 {
+      height: 50vh;   /* 원하는 높이 (px) */
+      width: 45%;
+    }
+
+    .plot-box2 {
+      height: 50vh;   /* 원하는 높이 (px) */
+      width: 32%;
+    }
   </style>
 </head>
 <body>
@@ -273,31 +282,20 @@
 
       <div class="row mt-4">
         <div class="col-12">
-          <input type="file" id="resultFile" style="display: none;"/>
           <div id="resultDivContent">
             <div id="plotContent" class="container text-center mt-4">
               <div class="row justify-content-center mb-3">
-                <div class="col-md-3 mb-3">
-                  <div class="border p-3">Plot 1</div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="border p-3">Plot 2</div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="border p-3">Plot 3</div>
-                </div>
+                <div class="col-md-3 mb-3 plot-box2" id="allPSMsPlot"></div>
+                <div class="col-md-3 mb-3 plot-box2" id="confidantPSMsPlot"></div>
+                <div class="col-md-3 mb-3 plot-box2" id="confidantSeqsPlot"></div>
               </div>
               <div class="row justify-content-center">
-                <div class="col-md-3 mb-3">
-                  <div class="border p-3">Plot 4</div>
-                </div>
-                <div class="col-md-3 mb-3">
-                  <div class="border p-3">Plot 5</div>
-                </div>
+                <div class="col-md-3 mb-3 plot-box1" id="lenPlot"></div>
+                <div class="col-md-3 mb-3 plot-box1" id="categoryPlot"></div>
               </div>
             </div>      
             <p></p>
-            <h6 class="mb-2">Output Files</h6>
+            <h5 class="section-heading" style="margin-top: 1rem;">Output Files</h5>
             <div class="table-responsive">
               <table class="table table-bordered table-hover align-middle text-center">
                   <thead class="table-light">
@@ -308,19 +306,19 @@
                   </thead>
                   <tbody>
                   <tr>
-                      <td><a href="">pxg.pxg</a></td>
+                      <td><a href="" id="pxgLink">pxg.pxg</a></td>
                       <td>This is a main output file and contains a list of identification as TSV format</td>
                   </tr>
                   <tr>
-                      <td><a href="">pxg.log</a></td>
+                      <td><a href="" id="logLink">pxg.log</a></td>
                       <td>This is a main pxg log file.</td>
                   </tr>
                   <tr>
-                      <td><a href="">pXg.pxg.pin</a></td>
+                      <td><a href="" id="pinLink">pXg.pxg.pin</a></td>
                       <td>This is a main output file and contains a list of identification as PIN format</td>
                   </tr>
                   <tr>
-                      <td><a href="">fdr.tsv</a></td>
+                      <td><a href="" id="fdrLink">fdr.tsv</a></td>
                       <td>This is a main output file and contains a list of identification after FDR control</td>
                   </tr>
                   </tbody>
@@ -335,13 +333,415 @@
   
     $(function() {
 
+        getDownloadFile()
+        
+        renderPlots();
+
         $('#backBtn').click(function(){
           window.location.href = './execution.html'; 
         });
 
-        readTextFile("file:///D:/pXg_offline_platform/toy_datasets/4.final_output/MD55A3_IFN_1.fdr.tsv");
-
     });
+
+    function getDownloadFile(){
+      // URL 파라미터 읽기
+      const params = new URLSearchParams(window.location.search);
+      const outputName = params.get("output"); 
+      const outputDir = params.get("outputDir"); 
+
+      // 각 파일명
+      const pxgName = `${outputName}.pxg`;
+      const logName = `${outputName}.pxg.log`;
+      const pinName = `${outputName}.pxg.pin`;
+      const fdrName = `${outputName}.fdr.tsv`;
+
+      // href는 file URL, download는 파일명만
+      const pxgHref = makeFileHref(outputDir, pxgName);
+      const logHref = makeFileHref(outputDir, logName);
+      const pinHref = makeFileHref(outputDir, pinName);
+      const fdrHref = makeFileHref(outputDir, fdrName);
+
+      const pxgLink = document.getElementById("pxgLink");
+      pxgLink.href = pxgHref;
+      pxgLink.textContent = pxgName;
+      pxgLink.download = pxgName;
+
+      const logLink = document.getElementById("logLink");
+      logLink.href = logHref;
+      logLink.textContent = logName;
+      logLink.download = logName;
+
+      const pinLink = document.getElementById("pinLink");
+      pinLink.href = pinHref;
+      pinLink.textContent = pinName;
+      pinLink.download = pinName;
+
+      const fdrLink = document.getElementById("fdrLink");
+      fdrLink.href = fdrHref;
+      fdrLink.textContent = fdrName;
+      fdrLink.download = fdrName;
+
+    }
+
+    function makeFileHref(dir, filename) {
+
+      // filename: "result.pxg" 같은 파일명
+      const dirNorm = String(dir).replace(/\\/g, '/').replace(/\/+$/, ''); 
+      const full = `${dirNorm}/${filename}`;
+
+      const prefix = /^[A-Za-z]:\//.test(dirNorm) ? 'file:///' : 'file://';
+
+      return encodeURI(prefix + full);
+    }
+
+    function parseTSV(text) {
+      const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(l => l.length > 0);
+      if (lines.length === 0) return { header: [], rows: [] };
+      const header = lines[0].split('\t');
+      const rows = [];
+      for (let i = 1; i < lines.length; i++) {
+        const cols = lines[i].split('\t');
+        while (cols.length < header.length) cols.push('');
+        rows.push(cols);
+      }
+      return { header, rows };
+    }
+
+    async function renderPlots(){
+
+      const params = new URLSearchParams(window.location.search);
+      const outputName = params.get("output");
+      const outputDir =params.get("outputDir"); 
+      //const fullPath = outputDir.replace(/\/+$/, '') + '/' + output;
+      const opts = {
+        outputDir,
+        tsvPath: `${outputName}.fdr.tsv`
+      }
+      const { path, text } = await window.tsv.read(opts);
+      const parsed = parseTSV(text);
+
+      renderALLHistogram(parsed.header, parsed.rows, 'allPSMsPlot'); 
+      renderConfidentHistogram(parsed.header, parsed.rows, 'confidantPSMsPlot'); 
+      renderSeqHistogram(parsed.header, parsed.rows, 'confidantSeqsPlot');
+      renderLenHistogram(parsed.header, parsed.rows, 'lenPlot');
+      renderCategoryHistogram(parsed.header, parsed.rows, 'categoryPlot');
+    }
+
+    function renderALLHistogram(header, rows, elementId) {
+
+      const plotDiv = document.getElementById(elementId);
+      if (!plotDiv) return;
+
+      const idxLabel = header.indexOf('Label');
+      const idxIsRef  = header.indexOf('IsReference');
+      const idxFastaC = header.indexOf('FastaIDCount');
+
+      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1) {
+        plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
+          필요한 컬럼(Label, IsReference, FastaIDCount) 중 일부가 없습니다.
+        </div>`;
+        return;
+      }
+
+      let c1=0, c2=0, c3=0, c4=0;
+
+      for (const r of rows) {
+        const label = toInt(r[idxLabel]);
+        const isRef = toBool(r[idxIsRef]);
+        const fastaCount = toInt(r[idxFastaC]);
+
+        // 4번은 label = -1 전체
+        if (label === -1) { c4++; continue; }
+
+        // label = 1 케이스들
+        if (label === 1) {
+          if (isRef && fastaCount > 0) c1++;
+          else if (!isRef && fastaCount > 0) c2++;
+          else if (!isRef && fastaCount === 0) c3++;
+          //else (isRef && fastaCount === 0) 
+        }
+      }
+
+      const x = [
+        'Reference',
+        'Ambiguous',
+        'Non-reference',
+        'Decoy'
+      ];
+      const y = [c1, c2, c3, c4];
+
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const layout = {
+        title: {text:'Barplot for all PSMs'},
+        ///height: heightPx,
+        margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -15 },
+        yaxis: { title: 'Count', rangemode: 'tozero' }
+      };
+
+      Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+    }
+
+    function renderConfidentHistogram(header, rows, elementId) {
+
+      const plotDiv = document.getElementById(elementId);
+      if (!plotDiv) return;
+
+      const idxLabel = header.indexOf('Label');
+      const idxIsRef  = header.indexOf('IsReference');
+      const idxFastaC = header.indexOf('FastaIDCount');
+      const idxFilter = header.indexOf('FDRFilter');
+
+      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1) {
+        plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
+          필요한 컬럼(Label, IsReference, FastaIDCount,FDRFilter) 중 일부가 없습니다.
+        </div>`;
+        return;
+      }
+
+      let c1=0, c2=0, c3=0
+
+      for (const r of rows) {
+        const label = toInt(r[idxLabel]);
+        const isRef = toBool(r[idxIsRef]);
+        const fastaCount = toInt(r[idxFastaC]);
+        const ifFiter = r[idxFilter]
+
+        // label = 1 케이스들
+        if (label === 1 && ifFiter == 'Pass') {
+          if (isRef && fastaCount > 0) c1++;
+          else if (!isRef && fastaCount > 0) c2++;
+          else if (!isRef && fastaCount === 0) c3++;
+          //else (isRef && fastaCount === 0) 
+        }
+      }
+
+      const x = [
+        'Reference',
+        'Ambiguous',
+        'Non-reference'
+      ];
+      const y = [c1, c2, c3];
+
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const layout = {
+        title: {text:'Barplot for confident PSMs'},
+        ///height: heightPx,
+        margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -15 },
+        yaxis: { title: 'Count', rangemode: 'tozero' }
+      };
+
+      Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+    }
+
+
+    function renderSeqHistogram(header, rows, elementId) {
+
+      const plotDiv = document.getElementById(elementId);
+      if (!plotDiv) return;
+
+      const idxLabel = header.indexOf('Label');
+      const idxIsRef  = header.indexOf('IsReference');
+      const idxFastaC = header.indexOf('FastaIDCount');
+      const idxSeq = header.indexOf('InferredSequence');
+      const idxFilter = header.indexOf('FDRFilter');
+
+      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1) {
+        plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
+          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence) 중 일부가 없습니다.
+        </div>`;
+        return;
+      }
+
+      const seen = new Set();
+      const uniqueRows = [];
+      for (const r of rows) {
+        const seq = r[idxSeq] || '';
+        if (!seen.has(seq)) {
+          seen.add(seq);
+          uniqueRows.push(r);
+        }
+      }
+
+      let c1=0, c2=0, c3=0
+
+      for (const r of uniqueRows) {
+        const label = toInt(r[idxLabel]);
+        const isRef = toBool(r[idxIsRef]);
+        const fastaCount = toInt(r[idxFastaC]);
+        const ifFilter = r[idxFilter]
+
+        // label = 1 케이스들
+        if (label === 1 && ifFilter == 'Pass') {
+        if (isRef && fastaCount > 0) c1++;
+        else if (!isRef && fastaCount > 0) c2++;
+        else if (!isRef && fastaCount === 0) c3++;
+        // (isRef && fastaCount === 0) 은 명세에 없음
+        }
+      }
+
+      const x = [
+        'Reference',
+        'Ambiguous',
+        'Non-reference'
+      ];
+      const y = [c1, c2, c3];
+
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const layout = {
+        title: {text:'Barplot for confident sequences'},
+        ///height: heightPx,
+        margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -15 },
+        yaxis: { title: 'Count', rangemode: 'tozero' }
+      };
+
+      Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+    }
+
+    function renderLenHistogram(header, rows, elementId) {
+      const plotDiv = document.getElementById(elementId);
+      if (!plotDiv) return;
+
+      const idxLabel  = header.indexOf('Label');
+      const idxIsRef  = header.indexOf('IsReference');
+      const idxFastaC = header.indexOf('FastaIDCount');
+      const idxSeq    = header.indexOf('InferredSequence');
+      const idxFilter = header.indexOf('FDRFilter');
+      const idxLen    = header.indexOf('PeptideLength');
+
+      if ([idxLabel, idxIsRef, idxFastaC, idxFilter, idxSeq, idxLen].some(i => i === -1)) {
+        plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
+          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, PeptideLength) 중 일부가 없습니다.
+        </div>`;
+        return;
+      }
+
+      // 카테고리별 수집 (카테고리 내부에서 InferredSequence 중복 제거)
+      function collect(fnPredicate) {
+        const seenSeq = new Set();
+        const values = [];
+        for (const r of rows) {
+          const seq = r[idxSeq] || '';
+          if (seenSeq.has(seq)) continue;
+          if (fnPredicate(r)) {
+            const len = toInt(r[idxLen]);
+            if (!Number.isNaN(len)) {
+              seenSeq.add(seq);
+              values.push(len);
+            }
+          }
+        }
+        return values;
+      }
+
+      // FDRFilter = Pass (대소문자/공백 무시)
+      const isPass = (r) => String(r[idxFilter]).trim().toLowerCase() === 'Pass';
+
+      // 4개 조건
+      const A = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===true  && toInt(r[idxFastaC])>0);  // Reference
+      const B = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])>0);  // Ambiguous
+      const C = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])===0); // Non-reference
+      const D = collect(r =>                      toInt(r[idxLabel])===-1 );                                                      // Decoy (FDR 무관)
+
+      // 공통 bin 설정: 8~15 길이, 간격 1 (정수 중앙에 맞추려면 7.5~15.5 권장)
+      const commonBins = { start: 7.5, end: 15.5, size: 1 };
+
+      // 히스토그램 trace (겹치기)
+      const trac1 = { name: 'Reference',     x: A, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#4C78A8' } };
+      const trac2 = { name: 'Ambiguous',     x: B, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#F58518' } };
+      const trac3 = { name: 'Non-reference', x: C, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#54A24B' } };
+      const trac4 = { name: 'Decoy',         x: D, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#B279A2' } };
+
+      const data = [trac1, trac2, trac3, trac4];
+
+      const layout = {
+        title: { text: 'Barplot for a length distribution ' },
+        barmode: 'overlay',            // ✅ 겹치기
+        margin: { l: 50, r: 10, t: 40, b: 60 },
+        xaxis: { title: 'Peptide Length', range: [7.5, 15.5], dtick: 1 },
+        yaxis: { title: 'Count', rangemode: 'tozero' },
+        legend: { orientation: 'v', x: 1.05, y: 0.5 }  // 오른쪽에 세로 배치
+      };
+
+      Plotly.newPlot(plotDiv, data, layout, { responsive: true });
+    }
+
+    function renderCategoryHistogram(header, rows, elementId) {
+
+      const plotDiv = document.getElementById(elementId);
+      if (!plotDiv) return;
+
+      const idxLabel = header.indexOf('Label');
+      const idxIsRef  = header.indexOf('IsReference');
+      const idxFastaC = header.indexOf('FastaIDCount');
+      const idxSeq = header.indexOf('InferredSequence');
+      const idxFilter = header.indexOf('FDRFilter');
+      const idxEvents = header.indexOf('Events');
+
+      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1 || idxEvents == -1) {
+        plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
+          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, Events) 중 일부가 없습니다.
+        </div>`;
+        return;
+      }
+
+       const counter = {};
+
+      for (const r of rows) {
+
+        const label  = parseInt(r[idxLabel], 10);
+        const filter = String(r[idxFilter]);
+        const isRef  = String(r[idxIsRef]).trim().toLowerCase() === 'true';
+        const fastaC = parseInt(r[idxFastaC], 10);
+        const events = String(r[idxEvents]).trim();
+
+        if (label !== 1) continue;
+        if (filter !== 'Pass') continue;
+        if (isRef) continue;
+        if (fastaC !== 0) continue;
+
+        let evKey = events;
+        if (events.includes('|')) evKey = 'Multi';
+        else if (events.includes('AS')) evKey = 'AS';
+
+        counter[evKey] = (counter[evKey] || 0) + 1;
+      }
+
+      const x = Object.keys(counter);
+      const y = Object.values(counter);
+
+      const trace = {
+        x, y,
+        type: 'bar',
+        text: y.map(String),
+        textposition: 'auto',
+        marker: { color: '#2a9d8f' }
+      };
+
+      const layout = {
+        title: {text:'Barplot for a category of non-reference peptides'},
+        ///height: heightPx,
+        margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -15 },
+        yaxis: { title: 'Count', rangemode: 'tozero' }
+      };
+
+      Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+
+    }
+
+
+    function toBool(v) {
+      if (typeof v === 'boolean') return v;
+      const s = String(v).trim().toLowerCase();
+      return s === 'true' || s === 't' || s === '1' || s === 'yes' || s === 'y';
+    }
+    function toInt(v) {
+      const n = parseInt(String(v).trim(), 10);
+      return Number.isFinite(n) ? n : 0;
+    }
 
     function updateFileName(input) {
       const spanId = input.id + 'Name';
@@ -349,19 +749,6 @@
       const span = document.getElementById(spanId);
       span.textContent = fileName;
       span.title = fileName;  // 툴팁 표시
-    }
-
-    function readTextFile(file) {
-
-      let content = null;
-      let xmlhttp = new XMLHttpRequest();
-      xmlhttp.open("GET", file, false);
-      xmlhttp.send();
-      //파일 로드 성공 시 파일에서 읽은 텍스트를 content에 담음
-      if (xmlhttp.status == 200) { 
-        content = xmlhttp.responseText;
-      }
-      console.log(content);
     }
 
 </script>

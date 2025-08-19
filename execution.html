@@ -52,6 +52,12 @@
       font-weight: 600;
       margin-top: 1.5rem;
     }
+    .section-heading-folder {
+      border-left: 4px solid #d97820;
+      padding-left: 0.75rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+    }
     .equal-height {
       height: 35px; /* form-control-sm과 동일 높이 */
       padding-top: 0;
@@ -89,19 +95,44 @@
   </nav>
 
   <div class="container">
+
     <div class="row">
       <div class="col-12">
-        <h5 class="section-heading">pXg Path</h5>
+        <h5 class="section-heading-folder">Sample Directory</h5>
         <div class="row">
           <div class="col-md-6 mb-3">
             <div class="upload-box">
               <div class="d-flex align-items-center">
-                <label for="location" class="form-label mb-0 me-3" style="width: 9rem;">Location<span class="text-danger ms-1">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="location" onchange="updateFileName(this)">
-                </label>
+                <label for="sampleDir" class="form-label mb-0 me-3" style="width: 9rem;">Folder</label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;" id="sampleDirBtn">Choose Folder</button>
+                <span id="sampleDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
+              </div>
+            </div>
+          </div>
+        </div> 
+       </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <h5 class="section-heading">Path</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="upload-box">
+              <div class="d-flex align-items-center">
+                <label for="location" class="form-label mb-0 me-3" style="width: 9rem;">pXg Location<span class="text-danger ms-1">*</span></label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="location">Choose File</button>
                 <span id="locationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <div class="upload-box">
+              <div class="d-flex align-items-center">
+                <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Output Location<span class="text-danger ms-1">*</span></label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
+                <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
               </div>
             </div>
           </div>
@@ -117,10 +148,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="searchResult" class="form-label mb-0 me-3" style="width: 9rem;">Search result<span class="text-danger ms-1">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="searchResult" onchange="updateFileName(this)">
-                </label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="searchResult">Choose File</button>
                 <span id="searchResultName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -130,10 +158,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="geneAnnotation" class="form-label mb-0 me-3" style="width: 9rem;">Gene annotation<span class="text-danger">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="geneAnnotation" onchange="updateFileName(this)">
-                </label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="geneAnnotation">Choose File</button>
                 <span id="geneAnnotationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -143,11 +168,8 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="rnaSeqReads" class="form-label mb-0 me-3" style="width: 9rem;">RNA-seq reads<span class="text-danger">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="rnaSeqReads" onchange="updateFileName(this)">
-                </label>
-                <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="rnaSeqReads">Choose File</button>
+                <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No files chosen</span>
               </div>
             </div>
           </div>
@@ -156,10 +178,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="proteinSequence" class="form-label mb-0 me-3" style="width: 9rem;">Protein sequence</label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="proteinSequence" onchange="updateFileName(this)">
-                </label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="proteinSequence">Choose File</button>
                 <span id="proteinSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -169,10 +188,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="aavSequence" class="form-label mb-0 me-3" style="width: 9rem;">Amino acid variants</label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="aavSequence" onchange="updateFileName(this)">
-                </label>
+                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="aavSequence">Choose File</button>
                 <span id="aavSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -185,8 +201,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="identifier_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Identifier</label>
-                <input type="text" class="form-control form-control-sm" id="identifier_index" placeholder="Index">
+                <label for="identifier_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Identifier<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="identifier_index" placeholder="Index" required>
               </div>
             </div>
           </div>
@@ -195,8 +211,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="peptide_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Peptide</label>
-                <input type="text" class="form-control form-control-sm" id="peptide_index" placeholder="Index">
+                <label for="peptide_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Peptide<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="peptide_index" placeholder="Index" required>
               </div>
             </div>
           </div>
@@ -205,8 +221,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Charge</label>
-                <input type="text" class="form-control form-control-sm" id="charge_index" placeholder="Index">
+                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Charge<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="charge_index" placeholder="Index" required>
               </div>
             </div>
           </div>
@@ -247,8 +263,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">FDR</label>
-                <input type="text" class="form-control form-control-sm" id="FDR" placeholder="0.01">
+                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">FDR<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="FDR" placeholder="0.01" required>
               </div>
             </div>
           </div>
@@ -257,8 +273,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="output" class="form-label mb-0 me-2" style="white-space: nowrap;">Output</label>
-                <input type="text" class="form-control form-control-sm" id="output" placeholder="Enter output name">
+                <label for="output" class="form-label mb-0 me-2" style="white-space: nowrap;">Output<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="output" placeholder="Enter output file prefix name" required>
               </div>
             </div>
           </div>
@@ -267,10 +283,9 @@
       <div class="row mb-3">
        <!-- Buttons box -->
         <div class="col-12 d-flex justify-content-center">
-          <div class="d-flex gap-3" style="min-width: 320px;">
+          <div class="d-flex gap-3" style="min-width: 200px;">
             <button class="btn btn-teal btn-sm h-100" id="startBtn" style="min-height: 38px;">Start</button>
             <button class="btn btn-orange btn-sm h-100" id="resetBtn" style="min-height: 38px;">Reset</button>
-            <button class="btn btn-gray btn-sm h-100" id="toyBtn" style="min-height: 38px;">Samples load</button>
           </div>
         </div>
       </div>
@@ -299,48 +314,71 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <tr>
-                          <td>Search result</td>
-                          <td>
-                          A list of PSMs identified from a search engine (e.g. 
-                          <a href="https://www.bioinfor.com/peaks/" target="_blank">PEAKS</a>, 
-                          <a href="https://github.com/bzhanglab/pNovo3" target="_blank">pNovo3</a>, 
-                          <a href="https://github.com/Noble-Lab/casanovo" target="_blank">Casanovo</a>)
-                          </td>
-                          <td>TSV or CSV</td>
-                          <td>Yes</td>
-                      </tr>
-                      <tr>
-                          <td>Gene annotation</td>
-                          <td>
-                          It must be the same file used in the read alignment (e.g. 
-                          <a href="https://www.gencodegenes.org/" target="_blank">Gencode</a>, 
-                          <a href="https://www.ensembl.org/" target="_blank">Ensembl</a>)
-                          </td>
-                          <td>GTF</td>
-                          <td>Yes</td>
-                      </tr>
-                      <tr>
-                          <td>RNA-Seq reads</td>
-                          <td>
-                          Mapped and unmapped RNA-Seq reads. The file must be sorted by coordinates. 
-                          Multiple SAM/BAM files should be separated by comma (,)
-                          </td>
-                          <td>SAM/BAM</td>
-                          <td>Yes</td>
-                      </tr>
-                      <tr>
-                          <td>Protein sequences</td>
-                          <td>Canonical and contaminant protein sequences (e.g. UniProt)</td>
-                          <td>Fasta</td>
+                        <tr>
+                          <td style="color: #007bff;">Sample directory</td>
+                          <td style="color: #007bff;">
+                          Select a sample directory to auto-load files and set parameters.
+                          <td>Directory</td>
                           <td>No</td>
-                      </tr>
-                      <tr>
-                          <td>Amino acid variant</td>
-                          <td>Amino acid variant</td>
-                          <td>tsv</td>
-                          <td>No</td>
-                      </tr>
+                        </tr>
+                        <tr>
+                          <td>pXg Path</td>
+                          <td>
+                          The location of pXg.jar
+                          </td>
+                          <td>.jar</td>
+                          <td>Yes</td>
+                        </tr>
+                        <tr>
+                          <td>Output Directory</td>
+                          <td>
+                          The output directory is where execution results will be saved.
+                          </td>
+                          <td>Directory</td>
+                          <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Search result</td>
+                            <td>
+                            A list of PSMs identified from a search engine (e.g. 
+                            <a href="https://www.bioinfor.com/peaks/" target="_blank">PEAKS</a>, 
+                            <a href="https://github.com/bzhanglab/pNovo3" target="_blank">pNovo3</a>, 
+                            <a href="https://github.com/Noble-Lab/casanovo" target="_blank">Casanovo</a>)
+                            </td>
+                            <td>TSV or CSV</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Gene annotation</td>
+                            <td>
+                            It must be the same file used in the read alignment (e.g. 
+                            <a href="https://www.gencodegenes.org/" target="_blank">Gencode</a>, 
+                            <a href="https://www.ensembl.org/" target="_blank">Ensembl</a>)
+                            </td>
+                            <td>GTF</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>RNA-Seq reads</td>
+                            <td>
+                            Mapped and unmapped RNA-Seq reads. The file must be sorted by coordinates. 
+                            Multiple SAM/BAM files should be separated by comma (,)
+                            </td>
+                            <td>SAM/BAM</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Protein sequences</td>
+                            <td>Canonical and contaminant protein sequences (e.g. UniProt)</td>
+                            <td>Fasta</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Amino acid variant</td>
+                            <td>Amino acid variant</td>
+                            <td>tsv</td>
+                            <td>No</td>
+                        </tr>
                       </tbody>
                   </table>
               </div>
@@ -358,60 +396,65 @@
                       <tbody>
                       <tr>
                           <td><code class="table_code">Identifier_index</code></td>
-                          <td>File name index in the PSM file</td>
+                          <td>Identifier_index is the 1-based column index of a unique spectrum identifier. To combine multiple columns, provide comma-separated indices without spaces (e.g., --identifier_index 1,2,3).</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Peptide_index</code></td>
-                          <td>Peptide index in the PSM file</td>
+                          <td>Peptide_index is the 1-based column index of peptide sequences in the PSM file.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Charge_index</code></td>
-                          <td>Charge state index in the PSM file</td>
+                          <td>Charge_index is the 1-based column index for charge state.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Score_index</code></td>
-                          <td>Score index in the PSM file</td>
+                          <td>Score_index is the 1-based column index for score.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Memory</code></td>
-                          <td>Setting the memory to be used when running a jar file</td>
+                          <td>Setting the memory to be used when running a jar file.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
-                          <td><code class="table_code">Thread</code></td>
-                          <td>The number of threads. Default is 4</td>
+                          <td><code class="table_code">Threads</code></td>
+                          <td>The number of threads. Default is 4.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">FDR</code></td>
-                          <td>False discovery rate</td>
+                          <td>False discovery rate.</td>
                           <td>Yes</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Output</code></td>
-                          <td>Base output name of pXg</td>
+                          <td>Output specifies the prefix of pXg output files.</td>
                           <td>Yes</td>
                       </tr>
                       </tbody>
                   </table>
               </div>      
           </div>
-          <div id="resultDivContent" style="display: none;"></div>
+          <div id="log" role="log" style="display: none; max-height:300px">
+            <span id="status"></span>
+            <h6 class="section-heading" style="margin-top: 1rem;">pXg log</h6>
+            <div id="pXgLogBox" aria-live="polite" style="height:300px; overflow-y:auto; overflow-x:hidden; background:#eaecee"></div>
+            <h6 class="section-heading" style="margin-top: 1rem;">Percolator log</h6>
+            <div id="percLogBox" aria-live="polite" style="height:300px; overflow-y:auto; overflow-x:hidden; background:#eaecee"></div>
+            <h6 class="section-heading" style="margin-top: 1rem;">FDR control log</h6>
+            <div id="resultLogBox" aria-live="polite" style="height:300px; overflow-y:auto; overflow-x:hidden; background:#eaecee"></div>
+          </div>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </body>
 <script>
-    $(function() {
 
-        $('#startBtn').click(function(){
-          window.location.href = './result_page.html'; 
-        });
+    $(function() {
 
         $('#resetBtn').click(function () {
           const fileIds = ['searchResult', 'geneAnnotation', 'rnaSeqReads', 'proteinSequence','aavSequence','location'];
@@ -419,43 +462,482 @@
             $('#' + id).val('');
             $('#' + id + 'Name').text('No file chosen').attr('title', 'No file chosen');
           });
-          $('#identifier_index, #peptide_index, #charge_index, #output, #memory, #thread, #score_index').val('');
+          $('#identifier_index, #peptide_index, #charge_index, #output, #memory, #thread, #score_index, #FDR').val('');
 
-        });
-
-        $('#toyBtn').click(function(){
-
-          $('#identifier_index').val('15');
-          $('#peptide_index').val('2');
-          $('#charge_index').val('12');
-          $('#score_index').val('9');
-          $('#output').val('toy_output');
-          $('#memory').val('32');
-          $('#thread').val('4');
-
-          const toyFiles = {
-            'location': 'pXg.v2.4.2.jar',
-            'searchResult': 'MD55A3_IFN_1.mztab',
-            'geneAnnotation': 'gencode.v47.basic.annotation.gtf',
-            'rnaSeqReads': 'MD55A3_IFN_1.bam,MD55A3_IFN_2.bam',
-            'proteinSequence': 'UP000005640.crap.fasta',
-            'aavSequence': 'aa_variant_table.tsv',
-          };
-
-          for (const id in toyFiles) {
-            $('#' + id + 'Name').text(toyFiles[id]).attr('title', toyFiles[id]);
-          }
+          $('#sampleDirName').text('No folder chosen').attr('title', 'No folder chosen');
+          $('#outputDirName').text('No folder chosen').attr('title', 'No folder chosen');
         });
 
     });
 
-    function updateFileName(input) {
-      const spanId = input.id + 'Name';
-      const fileName = input.files.length > 0 ? input.files[0].name : 'No file chosen';
-      const span = document.getElementById(spanId);
-      span.textContent = fileName;
-      span.title = fileName;  // 툴팁 표시
+    $('#outputDir').on('click', async () => {
+      const dir = await window.folderDir.pickDir();
+      if (dir) {
+        $('#outputDirName').attr('title', dir).text(dir);
+      }
+    });
+
+
+    $('#location').on('click', async () => {
+      const file = await window.file.pickFile();
+      if (file) {
+        $('#locationName').attr('title', file.absPath).text(file.name)
+      }
+    });
+
+    $('#searchResult').on('click', async () => {
+      const file = await window.file.pickFile();
+      if (file) {
+        $('#searchResultName').attr('title', file.absPath).text(file.name)
+      }
+    });
+    
+     $('#geneAnnotation').on('click', async () => {
+      const file = await window.file.pickFile();
+      if (file) {
+        $('#geneAnnotationName').attr('title', file.absPath).text(file.name)
+      }
+    });
+
+    $('#rnaSeqReads').on('click', async () => {
+
+      const files = await window.files.pickFiles();
+      if (files) {
+
+        var bamAbs = []
+        var bamNames = []
+
+        files.forEach(f => {
+          bamAbs.push(f.absPath)
+          bamNames.push(f.name)
+        });
+
+        if (bamAbs.length) {
+          $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
+        }
+      }
+    });
+
+     $('#proteinSequence').on('click', async () => {
+      const file = await window.file.pickFile();
+      if (file) {
+        $('#proteinSequenceName').attr('title', file.absPath).text(file.name)
+      }
+    });
+
+    $('#aavSequence').on('click', async () => {
+      const file = await window.file.pickFile();
+      if (file) {
+        $('#aavSequenceName').attr('title', file.absPath).text(file.name)
+      }
+    });
+
+
+    const $log = $('#pXgLogBox');
+    const $percLog = $('#percLogBox');
+    const $resultLog = $('#resultLogBox');
+    const $status = $('#status');
+
+    const setStatus = (text, cls='') => { $status.text(text).attr('class', cls); };
+    const stripAnsi = (s) => s.replace(/\x1b\[[0-9;]*m/g, '');
+    const addLog = (stream, line) => {
+      // 시간 + 라인 추가
+      const time = new Date().toLocaleTimeString();
+      $log.append(`<div class="${stream}">[${time}] ${stripAnsi(line)}</div>`);
+      // 자동 스크롤
+      $log.scrollTop($log[0].scrollHeight);
+    };
+
+    const addPercLog = (stream, line) => {
+      // 시간 + 라인 추가
+      const time = new Date().toLocaleTimeString();
+      $percLog.append(`<div class="${stream}">[${time}] ${stripAnsi(line)}</div>`);
+      // 자동 스크롤
+      $percLog.scrollTop($percLog[0].scrollHeight);
+    };
+
+    const addResultLog = (stream, line) => {
+      // 시간 + 라인 추가
+      const time = new Date().toLocaleTimeString();
+      $resultLog.append(`<div class="${stream}">[${time}] ${stripAnsi(line)}</div>`);
+      // 자동 스크롤
+      $resultLog.scrollTop($resultLog[0].scrollHeight);
+    };
+
+    const logEl = document.getElementById('pXgLogBox');
+
+    function append(stream, line){
+
+      const d = document.createElement('div');
+      d.className = stream;
+      d.textContent = line.replace(/\x1b\[[0-9;]*m/g, ""); // ANSI 제거(옵션)
+      logEl.appendChild(d);
+      logEl.scrollTop = logEl.scrollHeight;
     }
+
+    
+    $('#startBtn').on('click', async () => {
+
+      var validationResult = inputValidation();
+
+      if(validationResult){
+
+        $('#startBtn').prop('disabled', true);
+        $('#resetBtn').prop('disabled', true);
+
+        $('#homeDivContent').hide();
+        $('#log').show();
+
+        $log.find('div').remove();
+        $percLog.find('div').remove();
+        $resultLog.find('div').remove();
+
+        //debugger
+        const jarFile = $('#locationName').attr('title');
+        //let folderPath = jarFile.replace(/[/\\][^/\\]*$/, '');
+        //setStatus(jarPath, 'err');
+        
+        const memory =  $('#memory').val();
+        var jvmArgs = ["-Xmx"+memory+"G", "-Dfile.encoding=UTF-8"];
+        //setStatus(jvmArgs, 'err');
+        
+        var psmFile = $('#searchResultName').attr('title')
+        //setStatus(psmFile, 'err');
+
+        var gtfFile = $('#geneAnnotationName').attr('title')
+        //setStatus(gtfFile, 'err');
+
+        var fastaFile = $('#proteinSequenceName').attr('title')
+        //setStatus(fastaFile, 'err');
+
+        var aavFile = $('#aavSequenceName').attr('title')
+        //setStatus(aavFile, 'err');
+
+        var rnaInput = $('#rnaSeqReadsName').attr('title')
+
+        var bamList = rnaInput.split(",")
+        //setStatus(bamList.join(", "), 'err');
+
+        var folderPath = $('#outputDirName').attr('title')
+
+        const opts = {
+          jarPath: jarFile ,   
+          jvmArgs: jvmArgs,
+          args: [
+            '--psm' , psmFile,
+            '--bam' , rnaInput,
+            '--gtf' , gtfFile,
+            '--fasta' , fastaFile,
+            '--aa_variant' ,  aavFile,
+            '--peptide_index' ,  $('#peptide_index').val(),
+            '--identifier_index' ,  $('#identifier_index').val(),
+            '--charge_index' , $('#charge_index').val(),
+            '--score_index' , $('#score_index').val(),
+            '--threads' , $('#thread').val(),
+            '--output' , $('#output').val()
+          ],
+          cwd: folderPath
+        }; 
+
+        try {
+
+          const info = await window.jar.start(opts);
+
+          append(`▶ Started pid=${info.pid} cwd=${info.cwd}`);
+          
+        } catch (e) {
+
+          setStatus('Start error: ' + e.message, 'err');
+        }
+      }
+    });
+
+    window.jar.onStarted(({ pid }) => setStatus(`Running (pid ${pid})`, 'run'));
+    window.jar.onError(({ message }) => setStatus(`Error: ${message}`, 'err'));
+    window.jar.onLog(({ stream, line }) => addLog(stream, line));
+    window.jar.onExit(({ code, signal }) => {
+      if (code === 0) {
+        setStatus('Finished pXg (exit 0)', 'ok');
+        runPercolator();
+      } else {
+        setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
+      };
+    });
+
+
+    async function runPercolator(){
+
+      const pinFiles = $('#output').val()+".pxg.pin";   // 실제 JAR 출력으로 생성된 pin 파일 경로
+      var folderPath = $('#outputDirName').attr('title')
+      append('info', 'Launching Percolator automatically…');
+      const opts={
+        pinFiles:pinFiles,
+        outDir:folderPath,
+        cwd:folderPath
+      }
+      await window.perc.start(opts);
+    }
+
+    window.perc.onLog(({ stream, line }) => addPercLog(stream, line));
+    window.perc.onDone(({ code, signal }) => {
+      if (code === 0) {
+        setStatus('Finished Percolator (exit 0)', 'ok');
+        runControlFDR();
+      } else {
+        setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
+      };
+    });
+
+    async function runControlFDR(){
+
+      const jarFile = $('#locationName').attr('title');
+
+        //setStatus(jarPath, 'err');
+      var jvmArgs = ["-Dfile.encoding=UTF-8"];
+
+      var folderPath = $('#outputDirName').attr('title')
+
+      const opts = {
+        jarPath: jarFile,
+        jvmArgs: jvmArgs,
+        args: [
+          '--input' , $('#output').val()+".pxg",
+          '--target' ,"percolator_out/target.tsv",
+          '--decoy' , "percolator_out/decoy.tsv",
+          '--fdr' , $('#FDR').val(),
+          '--output' , $('#output').val()+".fdr.tsv"
+        ],
+        cwd: folderPath    // 필요 시 작업 폴더
+      };
+
+      try {
+        const info = await window.jarfdr.fdrstart(opts);
+        //append(`▶ Started pid=${info.pid} cwd=${info.cwd}`);
+        
+      } catch (e) {
+
+        setStatus('Start error: ' + e.message, 'err');
+      }
+
+      window.jarfdr.fdronStarted(({ pid }) => setStatus(`Running (pid ${pid})`, 'run'));
+      window.jarfdr.fdronError(({ message }) => setStatus(`Error: ${message}`, 'err'));
+      window.jarfdr.fdronLog(({ stream, line }) => addResultLog(stream, line));
+      window.jarfdr.fdronExit(({ code, signal }) => {
+        if (code === 0) {
+          setStatus('Finished FDR Control (exit 0)', 'ok');
+          const output = $('#output').val();
+          const outputDir = $('#outputDirName').attr('title');
+          location.href = `./result_page.html?output=${output}&outputDir=${outputDir}`;
+        } else {
+          setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
+        };
+      });
+    }
+
+
+    $('#sampleDirBtn').on('click', async () => {
+
+      const res = await window.folder.pick();
+      if (!res) return;
+      const { dir, files } = res;
+      //el('pickedDir').textContent = 'Selected: ' + dir;
+
+      document.getElementById('sampleDirName').title = dir; // 툴팁 표시
+      document.getElementById('sampleDirName').textContent = dir;
+
+      // 매핑 규칙
+      const bamAbs = [];
+      const bamNames = [];
+
+      for (const f of files) {
+        const ext = f.ext;            // ".bam" 등
+        const name = f.name.toLowerCase();
+
+        if (ext === '.mztab') {
+          $('#searchResultName').text(name).attr('title', f.path);
+
+        } else if (ext === '.bam') {
+          bamAbs.push(f.path);
+          bamNames.push(f.name);
+
+        } else if (ext === '.gtf') {
+          $('#geneAnnotationName').text(name).attr('title', f.path);
+
+        } else if (ext === '.fasta' || ext === '.fa') {
+           $('#proteinSequenceName').text(name).attr('title', f.path);
+
+        } else if (ext === '.tsv' && name.includes('aa_variant')) {
+          $('#aavSequenceName').text(name).attr('title', f.path);
+ 
+        }
+      }
+
+      // BAM은 다중
+      if (bamAbs.length) {
+        $('#rnaSeqReadsName').attr('title',bamNames.join(', '));
+        $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
+      }
+
+      $('#identifier_index').val('15');
+      $('#peptide_index').val('2');
+      $('#charge_index').val('12');
+      $('#score_index').val('9');
+      $('#output').val('toy_output');
+      $('#memory').val('32');
+      $('#thread').val('4');
+      $('#FDR').val('0.01');
+      
+    });
+
+
+    function appendLine({ stream, line }) {
+
+      const div = document.createElement("div");
+      div.className = stream;
+
+      line = line.replace(/\x1b\[[0-9;]*m/g, "");
+      div.textContent = line;
+      logEl.appendChild(div);
+      if (autoscrollEl.checked) {
+        logEl.scrollTop = logEl.scrollHeight;
+      }
+    }
+
+    function inputValidation() {
+
+      //output folder
+      //jar
+      if($('#outputDirName').attr('title') == 'No folder chosen'){
+        alert('Choose output directory pelease!')
+        //$('#location').focus()
+        return false
+      };
+
+      //jar
+      if($('#locationName').attr('title') == 'No file chosen'){
+        alert('Choose pXg location pelease!')
+        //$('#location').focus()
+        return false
+      };
+
+      var okExt = ['jar'];
+      var ext = $('#locationName').attr('title').split('.').pop().toLowerCase();
+      if(!okExt.includes(ext)){
+        alert('Please upload only .jar file!')
+        $('#locationName').text("No file chosen");
+        $('#locationName').attr('title','No file chosen');
+        //$('#location').focus()
+        return false
+      }
+
+      //search file
+      if($('#searchResultName').attr('title') == 'No file chosen'){
+        alert('Choose search result file pelease!')
+        //$('#searchResult').focus()
+        return false
+      };
+
+      okExt = ['mztab'];
+      ext = $('#searchResultName').attr('title').split('.').pop().toLowerCase();
+      if(!okExt.includes(ext)){
+        alert('Please upload only .mztab file.')
+        $('#searchResultName').text("No file chosen")
+        $('#searchResultName').attr('title','No file chosen');
+        //$('#searchResult').focus()
+        return false
+      }
+
+      //rna-seq
+      if($('#rnaSeqReadsName').attr('title') == 'No file chosen'){
+        alert('Choose RNA-seq reads file pelease!')
+        //$('#rnaSeqReads').focus()
+        return false
+      };
+
+      okExt = ['bam','sam'];
+      const fileNames = $('#rnaSeqReadsName').attr('title').split(',').map(s => s.trim()).filter(Boolean);
+      for (const name of fileNames) {
+        const dot = name.lastIndexOf('.');
+        const ext = dot >= 0 ? name.slice(dot + 1).toLowerCase() : '';
+        if(!okExt.includes(ext)){
+          alert('Please upload only .bam or .sam file.')
+          $('#rnaSeqReadsName').text("No file chosen")
+          $('#rnaSeqReadsName').attr('title','No file chosen');
+          //$('#rnaSeqReads').focus()
+          return false
+        }
+      }
+
+      //gene annotation
+      if($('#geneAnnotationName').attr('title') == 'No file chosen'){
+        alert('Choose RNA-seq reads file pelease!')
+        //$('#geneAnnotation').focus()
+        return false
+      };
+
+      okExt = ['gtf'];
+      ext = $('#geneAnnotationName').attr('title').split('.').pop().toLowerCase();
+      if(!okExt.includes(ext)){
+        alert('Please upload only .gtf file.')
+        $('#geneAnnotationName').text("No file chosen")
+        $('#geneAnnotationName').attr('title','No file chosen');
+        //$('#geneAnnotation').focus()
+        return false
+      }
+
+      //protein
+      if($('#proteinSequenceName').attr('title') != 'No file chosen'){
+        okExt = ['fasta','fa'];
+        ext = $('#proteinSequenceName').attr('title').split('.').pop().toLowerCase();
+        if(!okExt.includes(ext)){
+          alert('Please upload only .fasta file.')
+          $('#proteinSequenceName').text("No file chosen")
+          $('#proteinSequenceName').attr('title','No file chosen');
+          return false
+        }
+      }
+
+      //AAV
+      if($('#aavSequenceName').attr('title') != 'No file chosen'){
+        okExt = ['csv','tsv'];
+        ext = $('#aavSequenceName').attr('title').split('.').pop().toLowerCase();
+        if(!okExt.includes(ext)){
+          alert('Please upload only .csv or .tsv file.')
+          $('#aavSequenceName').text("No file chosen")
+          $('#aavSequenceName').attr('title','No file chosen');
+          return false
+        }
+      }
+
+      //identifier
+      if($('#identifier_index').val() == null || $('#identifier_index').val() == '' || $('#identifier_index').val().length == 0){
+        alert('Please enter "Identifier" index!')
+        return false
+      };
+      //peptide
+      if($('#peptide_index').val() == null || $('#peptide_index').val() == '' || $('#peptide_index').val().length == 0){
+        alert('Please enter "Peptide" index!')
+        return false
+      };
+      //charge
+      if($('#charge_index').val() == null || $('#charge_index').val() == '' || $('#charge_index').val().length == 0){
+        alert('Please enter "Charge" index!')
+        return false
+      };
+      //fdr
+      if($('#FDR').val() == null || $('#FDR').val() == '' || $('#FDR').val().length == 0){
+        alert('Please enter "FDR"!')
+        return false
+      };
+      //output
+      if($('#output').val() == null || $('#output').val() == '' || $('#output').val().length == 0){
+        alert('Please enter "Output"!')
+        return false
+      };
+
+      return true
+    }
+
 
 </script>
 </html>
