@@ -22,8 +22,8 @@ const RES_DIR = app.isPackaged ? process.resourcesPath : __dirname;
 
 function createWindow(openFilePath) {
   mainWindow = new BrowserWindow({
-    width: 1250,
-    height: 800,
+    width: 1400,
+    height: 1000,
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

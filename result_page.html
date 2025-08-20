@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>pXg</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="./css/bootstrap.min.css" rel="stylesheet">
+  <link href="./css/bootstrap-icons.css" rel="stylesheet">
 
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="./js/bootstrap.bundle.min.js"></script>
+  <script src="./js/jquery-3.5.1.js"></script>
+  <script src="./js/plotly-3.1.0.min.js" charset="utf-8"></script>
+
+  <script src="./js/papaparse.min.js"></script>
 
   <style>
     .custom-file-upload input[type="file"] { display: none; }
@@ -60,7 +61,7 @@
     }
     .plot-box1 {
       height: 50vh;   /* 원하는 높이 (px) */
-      width: 45%;
+      width: 90%;
     }
 
     .plot-box2 {
@@ -291,6 +292,8 @@
               </div>
               <div class="row justify-content-center">
                 <div class="col-md-3 mb-3 plot-box1" id="lenPlot"></div>
+              </div>
+              <div class="row justify-content-center">
                 <div class="col-md-3 mb-3 plot-box1" id="categoryPlot"></div>
               </div>
             </div>      
@@ -601,24 +604,25 @@
     }
 
     function renderLenHistogram(header, rows, elementId) {
+
       const plotDiv = document.getElementById(elementId);
       if (!plotDiv) return;
 
-      const idxLabel  = header.indexOf('Label');
+      const idxLabel = header.indexOf('Label');
       const idxIsRef  = header.indexOf('IsReference');
       const idxFastaC = header.indexOf('FastaIDCount');
-      const idxSeq    = header.indexOf('InferredSequence');
+      const idxSeq = header.indexOf('InferredSequence');
       const idxFilter = header.indexOf('FDRFilter');
-      const idxLen    = header.indexOf('PeptideLength');
+      const idxLen = header.indexOf('PeptideLength');
 
-      if ([idxLabel, idxIsRef, idxFastaC, idxFilter, idxSeq, idxLen].some(i => i === -1)) {
+      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1 || idxLen ==-1) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
           필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, PeptideLength) 중 일부가 없습니다.
         </div>`;
         return;
       }
 
-      // 카테고리별 수집 (카테고리 내부에서 InferredSequence 중복 제거)
+      // 카테고리별 수집 함수 (카테고리 내부에서 InferredSequence 중복 제거)
       function collect(fnPredicate) {
         const seenSeq = new Set();
         const values = [];
@@ -636,35 +640,58 @@
         return values;
       }
 
-      // FDRFilter = Pass (대소문자/공백 무시)
-      const isPass = (r) => String(r[idxFilter]).trim().toLowerCase() === 'Pass';
+      // 조건 정의
+      const isPass = (r) => String(r[idxFilter]) === 'Pass';
+      const A = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===true  && toInt(r[idxFastaC])>0);
+      const B = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])>0);
+      const C = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])===0);
+      const D = collect(r => toInt(r[idxLabel])===-1 ); // FDR 필터 없음
 
-      // 4개 조건
-      const A = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===true  && toInt(r[idxFastaC])>0);  // Reference
-      const B = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])>0);  // Ambiguous
-      const C = collect(r => isPass(r) && toInt(r[idxLabel])===1 && toBool(r[idxIsRef])===false && toInt(r[idxFastaC])===0); // Non-reference
-      const D = collect(r =>                      toInt(r[idxLabel])===-1 );                                                      // Decoy (FDR 무관)
+      // 8~15 길이만 카운트
+      const x = Array.from({length:8}, (_,i)=>i+8); // [8,9,...,15]
+      function countLen(arr) {
+        const counts = new Array(8).fill(0);
+        for (const l of arr) {
+          if (l>=8 && l<=15) counts[l-8]++;
+        }
+        return counts;
+      }
+      const y1 = countLen(A);
+      const y2 = countLen(B);
+      const y3 = countLen(C);
+      const y4 = countLen(D);
 
-      // 공통 bin 설정: 8~15 길이, 간격 1 (정수 중앙에 맞추려면 7.5~15.5 권장)
-      const commonBins = { start: 7.5, end: 15.5, size: 1 };
-
-      // 히스토그램 trace (겹치기)
-      const trac1 = { name: 'Reference',     x: A, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#4C78A8' } };
-      const trac2 = { name: 'Ambiguous',     x: B, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#F58518' } };
-      const trac3 = { name: 'Non-reference', x: C, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#54A24B' } };
-      const trac4 = { name: 'Decoy',         x: D, type: 'histogram', opacity: 0.55, xbins: commonBins, marker: { color: '#B279A2' } };
+      // trace 4개
+      const trac1 = { x, y:y1, type:'bar', name:"Reference", text:y1.map(String), textposition:'auto'};
+      const trac2 = { x, y:y2, type:'bar', name:"Ambiguous", text:y2.map(String), textposition:'auto' };
+      const trac3 = { x, y:y3, type:'bar', name:"Non-reference", text:y3.map(String), textposition:'auto' };
+      const trac4 = { x, y:y4, type:'bar', name:"Decoy", text:y4.map(String), textposition:'auto' };
 
       const data = [trac1, trac2, trac3, trac4];
 
       const layout = {
-        title: { text: 'Barplot for a length distribution ' },
-        barmode: 'overlay',            // ✅ 겹치기
-        margin: { l: 50, r: 10, t: 40, b: 60 },
-        xaxis: { title: 'Peptide Length', range: [7.5, 15.5], dtick: 1 },
-        yaxis: { title: 'Count', rangemode: 'tozero' },
-        legend: { orientation: 'v', x: 1.05, y: 0.5 }  // 오른쪽에 세로 배치
+        title: {
+          text: 'Barplot for a length distribution',
+          y: 0.97  // 타이틀을 살짝 위로 올리기 (0~1 사이, 1=최상단)
+        },
+        margin: { l:50, r:10, t:80, b:60 }, // top margin 늘려주기
+        xaxis: { 
+          title: { text: 'Peptide length' }
+        },
+        yaxis: { 
+          title: { text: 'Count' }, 
+          rangemode:'tozero' 
+        },
+        legend: { 
+          orientation: 'h',  // 가로로 배치
+          x: 0.5,            // 가운데 정렬
+          y: 1,           // 타이틀 위로 올리기
+          xanchor: 'center', 
+          yanchor: 'bottom' 
+        },
+        bargap: 0.2       
+        //bargroupgap: 
       };
-
       Plotly.newPlot(plotDiv, data, layout, { responsive: true });
     }
 
@@ -703,7 +730,7 @@
         if (fastaC !== 0) continue;
 
         let evKey = events;
-        if (events.includes('|')) evKey = 'Multi';
+        if (events.includes('|')) evKey = 'Multiple';
         else if (events.includes('AS')) evKey = 'AS';
 
         counter[evKey] = (counter[evKey] || 0) + 1;

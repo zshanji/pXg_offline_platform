@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>pXg</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <link href="./css/bootstrap.min.css" rel="stylesheet">
+  <link href="./css/bootstrap-icons.css" rel="stylesheet">
 
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
+  <script src="./js/bootstrap.bundle.min.js"></script>
+  <script src="./js/jquery-3.5.1.js"></script>
+  <script src="./js/plotly-3.1.0.min.js" charset="utf-8"></script>
 
   <style>
     .custom-file-upload input[type="file"] { display: none; }
@@ -45,6 +46,8 @@
       border-radius: 0.5rem;
       padding: 0.5rem 0.75rem; 
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: relative; 
+      z-index: 1;
     }
     .section-heading {
       border-left: 4px solid #3CAEB7;
@@ -104,7 +107,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="sampleDir" class="form-label mb-0 me-3" style="width: 9rem;">Folder</label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;" id="sampleDirBtn">Choose Folder</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;" id="sampleDirBtn">Choose Folder</button>
                 <span id="sampleDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
               </div>
             </div>
@@ -121,7 +124,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="location" class="form-label mb-0 me-3" style="width: 9rem;">pXg Location<span class="text-danger ms-1">*</span></label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="location">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="location">Choose File</button>
                 <span id="locationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -131,7 +134,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Output Location<span class="text-danger ms-1">*</span></label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
                 <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
               </div>
             </div>
@@ -148,7 +151,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="searchResult" class="form-label mb-0 me-3" style="width: 9rem;">Search result<span class="text-danger ms-1">*</span></label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="searchResult">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="searchResult">Choose File</button>
                 <span id="searchResultName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -158,7 +161,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="geneAnnotation" class="form-label mb-0 me-3" style="width: 9rem;">Gene annotation<span class="text-danger">*</span></label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="geneAnnotation">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="geneAnnotation">Choose File</button>
                 <span id="geneAnnotationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -168,8 +171,8 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="rnaSeqReads" class="form-label mb-0 me-3" style="width: 9rem;">RNA-seq reads<span class="text-danger">*</span></label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="rnaSeqReads">Choose File</button>
-                <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No files chosen</span>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="rnaSeqReads">Choose File</button>
+                <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
           </div>
@@ -178,7 +181,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="proteinSequence" class="form-label mb-0 me-3" style="width: 9rem;">Protein sequence</label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="proteinSequence">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="proteinSequence">Choose File</button>
                 <span id="proteinSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -188,7 +191,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="aavSequence" class="form-label mb-0 me-3" style="width: 9rem;">Amino acid variants</label>
-                <button class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="aavSequence">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="aavSequence">Choose File</button>
                 <span id="aavSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
               </div>
             </div>
@@ -231,8 +234,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Score</label>
-                <input type="text" class="form-control form-control-sm" id="score_index" placeholder="index">
+                <label for="score_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Score<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="score_index" placeholder="index" required>
               </div>
             </div>
           </div>
@@ -243,8 +246,8 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Memory</label>
-                <input type="text" class="form-control form-control-sm" id="memory" placeholder="GB">
+                <label for="memory" class="form-label mb-0 me-2" style="white-space: nowrap;">Memory</label>
+                <input type="text" class="form-control form-control-sm" id="memory" placeholder="GB" value="32">
               </div>
             </div>
           </div>
@@ -253,18 +256,18 @@
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Thread</label>
-                <input type="text" class="form-control form-control-sm" id="thread" placeholder="Number">
+                <label for="thread" class="form-label mb-0 me-2" style="white-space: nowrap;">Thread</label>
+                <input type="text" class="form-control form-control-sm" id="thread" placeholder="Number" value="4">
               </div>
             </div>
           </div>
 
-          <!-- thread -->
+          <!-- FDR -->
           <div class="col-md-3">
             <div class="upload-box p-2">
               <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">FDR<span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-sm" id="FDR" placeholder="0.01" required>
+                <label for="FDR" class="form-label mb-0 me-2" style="white-space: nowrap;">FDR<span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-sm" id="FDR" placeholder="0.01" required value="0.01">
               </div>
             </div>
           </div>
@@ -284,8 +287,8 @@
        <!-- Buttons box -->
         <div class="col-12 d-flex justify-content-center">
           <div class="d-flex gap-3" style="min-width: 200px;">
-            <button class="btn btn-teal btn-sm h-100" id="startBtn" style="min-height: 38px;">Start</button>
-            <button class="btn btn-orange btn-sm h-100" id="resetBtn" style="min-height: 38px;">Reset</button>
+            <button type="button" class="btn btn-teal btn-sm h-100" id="startBtn" style="min-height: 38px;">Start</button>
+            <button type="button" class="btn btn-orange btn-sm h-100" id="resetBtn" style="min-height: 38px;">Reset</button>
           </div>
         </div>
       </div>
@@ -417,12 +420,12 @@
                       <tr>
                           <td><code class="table_code">Memory</code></td>
                           <td>Setting the memory to be used when running a jar file.</td>
-                          <td>Yes</td>
+                          <td>No</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Threads</code></td>
                           <td>The number of threads. Default is 4.</td>
-                          <td>Yes</td>
+                          <td>No</td>
                       </tr>
                       <tr>
                           <td><code class="table_code">FDR</code></td>
@@ -462,10 +465,13 @@
             $('#' + id).val('');
             $('#' + id + 'Name').text('No file chosen').attr('title', 'No file chosen');
           });
-          $('#identifier_index, #peptide_index, #charge_index, #output, #memory, #thread, #score_index, #FDR').val('');
+          $('#identifier_index, #peptide_index, #charge_index, #output, #score_index').val('');
 
-          $('#sampleDirName').text('No folder chosen').attr('title', 'No folder chosen');
-          $('#outputDirName').text('No folder chosen').attr('title', 'No folder chosen');
+          $('#memory').val('32');
+          $('#thread').val('4');
+          $('#FDR').val('0.01');
+
+          $('#sampleDirName, #outputDirName').text('No folder chosen').attr('title', 'No folder chosen');
         });
 
     });
@@ -582,8 +588,7 @@
 
       if(validationResult){
 
-        $('#startBtn').prop('disabled', true);
-        $('#resetBtn').prop('disabled', true);
+        changeStatus(true);
 
         $('#homeDivContent').hide();
         $('#log').show();
@@ -596,9 +601,9 @@
         const jarFile = $('#locationName').attr('title');
         //let folderPath = jarFile.replace(/[/\\][^/\\]*$/, '');
         //setStatus(jarPath, 'err');
-        
-        const memory =  $('#memory').val();
-        var jvmArgs = ["-Xmx"+memory+"G", "-Dfile.encoding=UTF-8"];
+  
+        var memory = ($('#memory').val() === "" || $('#memory').val() === null) ? "32" : $('#memory').val();
+        var jvmArgs = ["-Xmx"+memory+"G"];
         //setStatus(jvmArgs, 'err');
         
         var psmFile = $('#searchResultName').attr('title')
@@ -615,29 +620,88 @@
 
         var rnaInput = $('#rnaSeqReadsName').attr('title')
 
-        var bamList = rnaInput.split(",")
+        var bamList = rnaInput.split(",");
         //setStatus(bamList.join(", "), 'err');
 
-        var folderPath = $('#outputDirName').attr('title')
+        var folderPath = $('#outputDirName').attr('title');
+        var thread = ($('#thread').val() === "" || $('#thread').val() === null) ? "4" : $('#thread').val();
 
-        const opts = {
-          jarPath: jarFile ,   
-          jvmArgs: jvmArgs,
-          args: [
-            '--psm' , psmFile,
-            '--bam' , rnaInput,
-            '--gtf' , gtfFile,
-            '--fasta' , fastaFile,
-            '--aa_variant' ,  aavFile,
-            '--peptide_index' ,  $('#peptide_index').val(),
-            '--identifier_index' ,  $('#identifier_index').val(),
-            '--charge_index' , $('#charge_index').val(),
-            '--score_index' , $('#score_index').val(),
-            '--threads' , $('#thread').val(),
-            '--output' , $('#output').val()
-          ],
-          cwd: folderPath
-        }; 
+        let opts = {}
+
+        if(aavFile != 'No file chosen' && fastaFile != 'No file chosen'){
+            opts = {
+              jarPath: jarFile ,   
+              jvmArgs: jvmArgs,
+              args: [
+                '--psm' , psmFile,
+                '--bam' , rnaInput,
+                '--gtf' , gtfFile,
+                '--fasta' , fastaFile,
+                '--aa_variant' ,  aavFile,
+                '--peptide_index' ,  $('#peptide_index').val(),
+                '--identifier_index' ,  $('#identifier_index').val(),
+                '--charge_index' , $('#charge_index').val(),
+                '--score_index' , $('#score_index').val(),
+                '--threads' , thread,
+                '--output' , $('#output').val()
+              ],
+              cwd: folderPath
+            }; 
+            
+        } else if(aavFile != 'No file chosen' && fastaFile == 'No file chosen'){
+            opts = {
+              jarPath: jarFile ,   
+              jvmArgs: jvmArgs,
+              args: [
+                '--psm' , psmFile,
+                '--bam' , rnaInput,
+                '--gtf' , gtfFile,
+                '--aa_variant' ,  aavFile,
+                '--peptide_index' ,  $('#peptide_index').val(),
+                '--identifier_index' ,  $('#identifier_index').val(),
+                '--charge_index' , $('#charge_index').val(),
+                '--score_index' , $('#score_index').val(),
+                '--threads' , thread,
+                '--output' , $('#output').val()
+              ],
+              cwd: folderPath
+            }; 
+        } else if(aavFile == 'No file chosen' && fastaFile != 'No file chosen'){
+            opts = {
+              jarPath: jarFile ,   
+              jvmArgs: jvmArgs,
+              args: [
+                '--psm' , psmFile,
+                '--bam' , rnaInput,
+                '--gtf' , gtfFile,
+                '--fasta' , fastaFile,
+                '--peptide_index' ,  $('#peptide_index').val(),
+                '--identifier_index' ,  $('#identifier_index').val(),
+                '--charge_index' , $('#charge_index').val(),
+                '--score_index' , $('#score_index').val(),
+                '--threads' , thread,
+                '--output' , $('#output').val()
+              ],
+              cwd: folderPath
+            }; 
+        } else{
+          opts = {
+              jarPath: jarFile ,   
+              jvmArgs: jvmArgs,
+              args: [
+                '--psm' , psmFile,
+                '--bam' , rnaInput,
+                '--gtf' , gtfFile,
+                '--peptide_index' ,  $('#peptide_index').val(),
+                '--identifier_index' ,  $('#identifier_index').val(),
+                '--charge_index' , $('#charge_index').val(),
+                '--score_index' , $('#score_index').val(),
+                '--threads' , $('#thread').val(),
+                '--output' , $('#output').val()
+              ],
+              cwd: folderPath
+            };
+        } 
 
         try {
 
@@ -647,6 +711,7 @@
           
         } catch (e) {
 
+          changeStatus(false);
           setStatus('Start error: ' + e.message, 'err');
         }
       }
@@ -660,12 +725,15 @@
         setStatus('Finished pXg (exit 0)', 'ok');
         runPercolator();
       } else {
+        changeStatus(false);
         setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
       };
     });
 
 
     async function runPercolator(){
+
+      changeStatus(true);
 
       const pinFiles = $('#output').val()+".pxg.pin";   // 실제 JAR 출력으로 생성된 pin 파일 경로
       var folderPath = $('#outputDirName').attr('title')
@@ -684,11 +752,14 @@
         setStatus('Finished Percolator (exit 0)', 'ok');
         runControlFDR();
       } else {
+        changeStatus(false);
         setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
       };
     });
 
     async function runControlFDR(){
+
+      changeStatus(true);
 
       const jarFile = $('#locationName').attr('title');
 
@@ -715,7 +786,7 @@
         //append(`▶ Started pid=${info.pid} cwd=${info.cwd}`);
         
       } catch (e) {
-
+        changeStatus(false);
         setStatus('Start error: ' + e.message, 'err');
       }
 
@@ -729,9 +800,18 @@
           const outputDir = $('#outputDirName').attr('title');
           location.href = `./result_page.html?output=${output}&outputDir=${outputDir}`;
         } else {
+          changeStatus(false);
           setStatus(`Failed (exit ${code}${signal ? ', '+signal : ''})`, 'err')
         };
       });
+    }
+
+    function changeStatus(status){
+
+      $('#startBtn').prop('disabled', status);
+      $('#resetBtn').prop('disabled', status);
+      $('#identifier_index, #peptide_index, #charge_index, #output, #score_index, #thread, #memory, #FDR').prop('disabled', status);
+
     }
 
 
@@ -774,7 +854,6 @@
 
       // BAM은 다중
       if (bamAbs.length) {
-        $('#rnaSeqReadsName').attr('title',bamNames.join(', '));
         $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
       }
 
@@ -837,7 +916,7 @@
         return false
       };
 
-      okExt = ['mztab'];
+      okExt = ['tsv','csv','mztab'];
       ext = $('#searchResultName').attr('title').split('.').pop().toLowerCase();
       if(!okExt.includes(ext)){
         alert('Please upload only .mztab file.')
@@ -870,7 +949,7 @@
 
       //gene annotation
       if($('#geneAnnotationName').attr('title') == 'No file chosen'){
-        alert('Choose RNA-seq reads file pelease!')
+        alert('Choose gene annotation file pelease!')
         //$('#geneAnnotation').focus()
         return false
       };
@@ -922,6 +1001,11 @@
       //charge
       if($('#charge_index').val() == null || $('#charge_index').val() == '' || $('#charge_index').val().length == 0){
         alert('Please enter "Charge" index!')
+        return false
+      };
+      //score
+      if($('#score_index').val() == null || $('#score_index').val() == '' || $('#score_index').val().length == 0){
+        alert('Please enter "Score" index!')
         return false
       };
       //fdr

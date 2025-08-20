@@ -4,13 +4,23 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <title>pXg</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="./css/bootstrap.min.css" rel="stylesheet">
+  <link href="./css/bootstrap-icons.css" rel="stylesheet">
+
+  <script src="./js/bootstrap.bundle.min.js"></script>
+  <script src="./js/jquery-3.5.1.js"></script>
+  <script src="./js/plotly-3.1.0.min.js" charset="utf-8"></script>
+
+
+  <!--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>
+  <script src="https://cdn.plot.ly/plotly-3.1.0.min.js" charset="utf-8"></script>-->
 
   <style>
     .custom-file-upload input[type="file"] { display: none; }
@@ -116,6 +126,7 @@
   </section>
 </body>
 <script>
+  
    document.getElementById('runPxgLink').addEventListener('click', (e) => {
     e.preventDefault(); // 기본 링크 이동 막기
     location.href = './execution.html'; // 같은 창에서 이동 → preload 유지
