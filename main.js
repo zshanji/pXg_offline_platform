@@ -30,7 +30,8 @@ function createWindow(openFilePath) {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false
-    }
+    },
+    icon: path.join(__dirname, 'icon', 'logo.svg')
   });
   Menu.setApplicationMenu(null);
 
@@ -120,6 +121,24 @@ function findExecutable(cmd, extraPaths = []) {
   return cmd; 
 }
 
+function getJarPath() {
+  let jarPath;
+  if (app.isPackaged) {
+    // 패키징된 경우 → resources/bin 안에 jar가 들어감
+    jarPath = path.join(process.resourcesPath, 'bin', 'pXg.v2.4.4.jar');
+  } else {
+    // 개발 중인 경우 → 프로젝트 루트/bin
+    jarPath = path.join(app.getAppPath(), 'bin', 'pXg.v2.4.4.jar');
+  }
+
+  if (!fs.existsSync(jarPath)) {
+    console.error(`❌ JAR file not found at: ${jarPath}`);
+  } else {
+    console.log(`✅ JAR file located at: ${jarPath}`);
+  }
+  return jarPath;
+}
+
 
 /* ---------------------------
  *  JAR 실행
@@ -128,7 +147,7 @@ ipcMain.handle('jar:start', async (evt, payload = {}) => {
 
   const { jarPath, jvmArgs = [], args = [], cwd } = payload;
 
-  let newJarPath = path.join(app.getAppPath(), 'bin', 'pXg.v2.4.4.jar');
+  let newJarPath = getJarPath();
   evt.sender.send('jar:log', { stream: 'info', line: `[EXEC] ${newJarPath}` });
 
   // Java 실행 파일 탐색
@@ -183,7 +202,7 @@ ipcMain.handle('jarfdr:start', async (evt, payload = {}) => {
 
   const { jarPath, jvmArgs = [], args = [], cwd } = payload;
 
-  let newJarPath = path.join(app.getAppPath(), 'bin', 'pXg.v2.4.4.jar');
+  let newJarPath = getJarPath();
 
   // Java 실행 파일 탐색
   const javaCmd = findExecutable(

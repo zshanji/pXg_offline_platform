@@ -498,16 +498,35 @@
         }
         return counts;
       }
+
+
       const y1 = countLen(A);
       const y2 = countLen(B);
       const y3 = countLen(C);
       const y4 = countLen(D);
 
-      // trace 4개
-      const trac1 = { x, y:y1, type:'bar', name:"Reference", text:y1.map(String), textposition:'auto',marker:{color:'#1f77b4'}};
-      const trac2 = { x, y:y2, type:'bar', name:"Ambiguous", text:y2.map(String), textposition:'auto' ,marker:{color:'#ff7f0e'}};
-      const trac3 = { x, y:y3, type:'bar', name:"Non-reference", text:y3.map(String), textposition:'auto' ,marker:{color:'#2ca02c'}};
-      const trac4 = { x, y:y4, type:'bar', name:"Decoy", text:y4.map(String), textposition:'auto' ,marker:{color:'#d62728'}};
+      const allPep = y1.concat(y2, y3, y4).reduce((sum, v) => sum + v, 0);
+
+      // 비율로 변환 (각 count / allPep)
+      function toProportion(arr) {
+        return arr.map(v => Number((v / allPep).toFixed(2)));
+      }
+
+      const trac1 = { x, y: toProportion(y1), type:'bar', name:"Reference",
+        text: y1.map(String), textposition:'auto',
+        marker:{color:'#1f77b4'}};
+
+      const trac2 = { x, y: toProportion(y2), type:'bar', name:"Ambiguous",
+        text: y2.map(String), textposition:'auto',
+        marker:{color:'#ff7f0e'}};
+
+      const trac3 = { x, y: toProportion(y3), type:'bar', name:"Non-reference",
+        text: y3.map(String), textposition:'auto',
+        marker:{color:'#2ca02c'}};
+
+      const trac4 = { x, y: toProportion(y4), type:'bar', name:"Decoy",
+        text: y4.map(String), textposition:'auto',
+        marker:{color:'#d62728'}};
 
       const data = [trac1, trac2, trac3, trac4];
 
@@ -521,7 +540,7 @@
           title: { text: 'Peptide length' }
         },
         yaxis: { 
-          //title: { text: 'Count' }, 
+          title: { text: 'Length proportion' }, 
           rangemode:'tozero' 
         },
         legend: { 
