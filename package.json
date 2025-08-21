@@ -17,7 +17,9 @@
       "main.js",
       "preload.js",
       "package.json",
-      "icon/**/*"
+      "icon/**/*",
+      "css/**/*",
+      "js/**/*"
     ],
     "mac": {
       "target": "dir",                          
