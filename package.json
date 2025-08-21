@@ -1,52 +1,12 @@
 {
-  "name": "pxg-offline",
-  "productName": "pxg-offline",
+  "name": "pxg_offline_platform",
   "version": "1.0.0",
   "main": "main.js",
-  "type": "module",
-  "author": "ZSJ",
-  "description": "pXg offline app",
+  "type": "module",            
   "scripts": {
-    "start": "electron .",
-    "pack:mac": "electron-builder --mac dir --arm64",
-    "pack:mac:zip": "electron-builder --mac dir,zip --arm64",
-    "pack:mac:dmg": "electron-builder --mac dir,dmg --arm64",
-    "pack:mac:universal": "electron-builder --mac dir,zip --universal"
-  },
-  "build": {
-    "appId": "com.example.pxgoffline",
-    "productName": "pxg-offline",
-    "asar": false,
-    "directories": {
-      "output": "dist"
-    },
-
-    "files": [
-      "index.html",
-      "execution.html",
-      "result_page.html",
-      "main.js",
-      "preload.js",
-      "package.json",
-      "icon/**/*",
-      "css/**/*",
-      "js/**/*"
-    ],
-    "mac": {
-      "target": [ "dir" ],
-      "category": "public.app-category.developer-tools",
-      "icon": "build/icon.icns",
-      "hardenedRuntime": false,  
-      "gatekeeperAssess": false
-    },
-
-    "dmg": {
-      "background": null,       
-      "sign": false           
-    }
+    "start": "electron ."
   },
   "devDependencies": {
-    "electron": "^37.3.0",
-    "electron-builder": "^26.0.12"
+    "electron": "^31.0.0"
   }
 }

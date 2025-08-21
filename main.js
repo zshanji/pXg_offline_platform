@@ -1,9 +1,9 @@
-import { app, BrowserWindow, ipcMain, Menu, dialog } from 'electron';
-import { spawn } from 'node:child_process';
+import { app, BrowserWindow, ipcMain, Menu, dialog, shell } from 'electron';
+import { spawn,execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
-import { promises as fsp } from 'fs';
+import { promises as fsp,existsSync } from 'fs';
 
 
 function log(...a){ console.log("[MAIN]", ...a); }
@@ -96,16 +96,56 @@ function quoteArg(a) {
 }
 
 /* ---------------------------
+ *  실행 파일 경로 탐색 함수
+ * --------------------------- */
+function findExecutable(cmd, extraPaths = []) {
+  try {
+    if (process.platform === 'win32') {
+      // Windows: where 명령 사용
+      const out = execSync(`where ${cmd}`, { stdio: ['ignore', 'pipe', 'ignore'] })
+        .toString().split(/\r?\n/)[0].trim();
+      if (existsSync(out)) return out;
+    } else {
+      // macOS/Linux: which 명령 사용
+      const out = execSync(`which ${cmd}`, { stdio: ['ignore', 'pipe', 'ignore'] })
+        .toString().split(/\r?\n/)[0].trim();
+      if (existsSync(out)) return out;
+    }
+  } catch (e) {
+    // 못 찾으면 아래 extraPaths에서 검색
+    for (const p of extraPaths) {
+      if (existsSync(p)) return p;
+    }
+  }
+  return cmd; 
+}
+
+
+/* ---------------------------
  *  JAR 실행
  * --------------------------- */
 ipcMain.handle('jar:start', async (evt, payload = {}) => {
 
   const { jarPath, jvmArgs = [], args = [], cwd } = payload;
 
-  let newJarPath = jarPath
+  let newJarPath = path.join(app.getAppPath(), 'bin', 'pXg.v2.4.4.jar');
   evt.sender.send('jar:log', { stream: 'info', line: `[EXEC] ${newJarPath}` });
 
-  let javaCmd = process.platform === 'win32' ? 'java.exe' : 'java';;
+  // Java 실행 파일 탐색
+  const javaCmd = findExecutable(
+    process.platform === 'win32' ? 'java.exe' : 'java',
+    process.platform === 'darwin'
+      ? [
+          '/usr/bin/java',
+          '/opt/homebrew/bin/java', 
+          '/usr/local/bin/java'  
+        ]
+      : []
+  );
+
+  evt.sender.send('jar:log', { stream: 'info', line: `[JAVA] ${javaCmd}` });
+
+  //let javaCmd = process.platform === 'win32' ? 'java.exe' : 'java';;
   let fullArgs= [...jvmArgs, '-jar', newJarPath, ...args];
 
   const commandLine = [quoteArg(javaCmd), ...fullArgs.map(quoteArg)].join(' ');
@@ -143,9 +183,23 @@ ipcMain.handle('jarfdr:start', async (evt, payload = {}) => {
 
   const { jarPath, jvmArgs = [], args = [], cwd } = payload;
 
-  let newJarPath = jarPath
+  let newJarPath = path.join(app.getAppPath(), 'bin', 'pXg.v2.4.4.jar');
 
-  let javaCmd = process.platform === 'win32' ? 'java.exe' : 'java';;
+  // Java 실행 파일 탐색
+  const javaCmd = findExecutable(
+    process.platform === 'win32' ? 'java.exe' : 'java',
+    process.platform === 'darwin'
+      ? [
+          '/usr/bin/java',
+          '/opt/homebrew/bin/java', 
+          '/usr/local/bin/java'  
+        ]
+      : []
+  );
+
+  evt.sender.send('jar:log', { stream: 'info', line: `[JAVA] ${javaCmd}` });
+
+  //let javaCmd = process.platform === 'win32' ? 'java.exe' : 'java';;
   const mainClass = 'progistar.tdc.TDC';
   let fullArgs = [...jvmArgs, '-cp', newJarPath, mainClass, ...args];
 
@@ -188,7 +242,19 @@ ipcMain.handle('perc:start', async (evt, payload = {}) => {
     cwd
   } = payload;
 
-  const percolatorBin = process.platform === 'win32' ? 'percolator.exe' : 'percolator';
+  // Percolator 실행 파일 탐색
+  const percolatorBin = findExecutable(
+    process.platform === 'win32' ? 'percolator.exe' : 'percolator',
+    process.platform === 'darwin'
+      ? [
+          '/opt/homebrew/bin/percolator',
+          '/usr/local/bin/percolator'
+        ]
+      : []
+  );
+  evt.sender.send('jar:log', { stream: 'info', line: `[PERCO] ${percolatorBin}` });
+
+  //const percolatorBin = process.platform === 'win32' ? 'percolator.exe' : 'percolator';
 
   // 생성할 폴더 경로
   const newoutDir = path.join(outDir, 'percolator_out');
@@ -265,17 +331,17 @@ ipcMain.handle('tsv:read', async (_evt,  payload = {}) => {
 
 
 /* ---------------------------
- *  folder 읽어오기
+ *  Sapmle folder 읽어오기
  * --------------------------- */
-ipcMain.handle('pick:directory', async () => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory']
-  });
-  if (canceled || !filePaths?.[0]) return null;
-  const dir = filePaths[0];
-  const files = await listFilesRecursive(dir);
-  return { dir, files }; // files: [{path, name, ext, rel}]
-});
+
+// 프로젝트 안 toy_samples 위치 계산
+function getToySamplesPath() {
+  if (app.isPackaged) {
+    return path.join(process.resourcesPath, 'toy_samples');
+  } else {
+    return path.join(app.getAppPath(), 'toy_samples');
+  }
+}
 
 
 async function listFilesRecursive(root) {
@@ -301,6 +367,18 @@ async function listFilesRecursive(root) {
   return walk(root, []);
 }
 
+/* ---------------------------
+ *  spamle folder dataset 읽어오기
+ * --------------------------- */
+ipcMain.handle('pick:directory', async () => {
+
+  const dir = getToySamplesPath();
+  const files = await listFilesRecursive(dir);
+  return { dir, files };  
+
+});
+
+
 
 ipcMain.handle('pickDir:directory', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
@@ -325,6 +403,7 @@ ipcMain.handle('pick:file', async () => {
   return { absPath, name };
 });
 
+
 ipcMain.handle('pick:files', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
     properties: ['openFile', 'multiSelections'] 
@@ -336,4 +415,36 @@ ipcMain.handle('pick:files', async () => {
     absPath,
     name: path.basename(absPath)
   }));
+});
+
+
+ipcMain.handle('reveal:file', async (evt, p) => {
+  try {
+    if (!p) return { ok: false, msg: 'No path provided' };
+    if (!fs.existsSync(p)) return { ok: false, msg: 'File not found', path: p };
+    shell.showItemInFolder(p);    
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, msg: err.message, path: p };
+  }
+});
+
+/* ---------------------------
+ *  log save
+ * --------------------------- */
+ipcMain.handle('save:logFile', async (evt, { content, filename, outputDir }) => {
+
+  try {
+
+    let saveName = filename.endsWith('.log') ? filename : filename.replace(/\.[^/.]+$/, '') + '.log';
+    let filePath = path.join(outputDir, saveName);
+
+    fs.writeFileSync(filePath, content, 'utf8');
+
+    return filePath;  
+
+  } catch (err) {
+    console.error('Error saving log:', err);
+    throw err;
+  }
 });

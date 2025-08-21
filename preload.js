@@ -49,11 +49,12 @@ contextBridge.exposeInMainWorld('tsv', {
   read: (filePath) => ipcRenderer.invoke('tsv:read', filePath)
 });
 
-// folder 관련 API
+// sapmle folder 열기 API
 contextBridge.exposeInMainWorld('folder', {
   pick: () => ipcRenderer.invoke('pick:directory')
 });
 
+//folder 선택 API
 contextBridge.exposeInMainWorld('folderDir', {
   pickDir: () => ipcRenderer.invoke('pickDir:directory')
 });
@@ -65,4 +66,14 @@ contextBridge.exposeInMainWorld('file', {
 
 contextBridge.exposeInMainWorld('files', {
   pickFiles: () => ipcRenderer.invoke('pick:files')
+});
+
+//결과 파일 오픈 API
+contextBridge.exposeInMainWorld('resultDir', {
+  revealInFolder: (filePath) => ipcRenderer.invoke('reveal:file', filePath)
+});
+
+//Log download API
+contextBridge.exposeInMainWorld('logSave', {
+  saveLogFile: (content, filename, outputDir) => ipcRenderer.invoke('save:logFile', { content, filename,outputDir })
 });

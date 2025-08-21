@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>pXg</title>
-  
+
   <link href="./css/bootstrap.min.css" rel="stylesheet">
   <link href="./css/bootstrap-icons.css" rel="stylesheet">
 
@@ -87,7 +87,7 @@
         <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenuButton">
           <li><a class="dropdown-item" href="./index.html">Home</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="./execution.html">Run pXg</a></li>
+          <li><a class="dropdown-item" href="./execution.html">Launch pXg</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="https://github.com/HanyangBISLab/pXg" target="_blank">Github</a></li>
           <li><hr class="dropdown-divider"></li>
@@ -98,50 +98,6 @@
   </nav>
 
   <div class="container">
-
-    <div class="row">
-      <div class="col-12">
-        <h5 class="section-heading-folder">Sample Directory</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="sampleDir" class="form-label mb-0 me-3" style="width: 9rem;">Folder</label>
-                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;" id="sampleDirBtn">Choose Folder</button>
-                <span id="sampleDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
-              </div>
-            </div>
-          </div>
-        </div> 
-       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        <h5 class="section-heading">Path</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="location" class="form-label mb-0 me-3" style="width: 9rem;">pXg Location<span class="text-danger ms-1">*</span></label>
-                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="location">Choose File</button>
-                <span id="locationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Output Location<span class="text-danger ms-1">*</span></label>
-                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
-                <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
-              </div>
-            </div>
-          </div>
-        </div> 
-       </div>
-    </div>
 
     <div class="row">
       <div class="col-12">
@@ -281,18 +237,34 @@
               </div>
             </div>
           </div>
-      </div>
+        </div>
+      
+      <div class="row">
+      <div class="col-12">
+        <h5 class="section-heading">Working directory</h5>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="upload-box">
+              <div class="d-flex align-items-center">
+                <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Location<span class="text-danger ms-1">*</span></label>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
+                <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
+              </div>
+            </div>
+          </div>
+        </div> 
+       </div>
+    </div>
 
       <div class="row mb-3">
        <!-- Buttons box -->
         <div class="col-12 d-flex justify-content-center">
-          <div class="d-flex gap-3" style="min-width: 200px;">
+          <div class="d-flex gap-3" style="min-width: 320px;">
             <button type="button" class="btn btn-teal btn-sm h-100" id="startBtn" style="min-height: 38px;">Start</button>
             <button type="button" class="btn btn-orange btn-sm h-100" id="resetBtn" style="min-height: 38px;">Reset</button>
+            <button type="button" class="btn btn-gray btn-sm h-100" id="sampleDirBtn" style="min-height: 38px;">Try pXg</button>
           </div>
         </div>
-      </div>
-
       </div>
 
       <div class="row mt-4">
@@ -317,29 +289,7 @@
                       </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td style="color: #007bff;">Sample directory</td>
-                          <td style="color: #007bff;">
-                          Select a sample directory to auto-load files and set parameters.
-                          <td>Directory</td>
-                          <td>No</td>
-                        </tr>
-                        <tr>
-                          <td>pXg Path</td>
-                          <td>
-                          The location of pXg.jar
-                          </td>
-                          <td>.jar</td>
-                          <td>Yes</td>
-                        </tr>
-                        <tr>
-                          <td>Output Directory</td>
-                          <td>
-                          The output directory is where execution results will be saved.
-                          </td>
-                          <td>Directory</td>
-                          <td>Yes</td>
-                        </tr>
+                        
                         <tr>
                             <td>Search result</td>
                             <td>
@@ -382,6 +332,15 @@
                             <td>tsv</td>
                             <td>No</td>
                         </tr>
+
+                        <tr>
+                          <td>Working directory</td>
+                          <td>
+                          The working directory is where execution results will be saved.
+                          </td>
+                          <td>Directory</td>
+                          <td>Yes</td>
+                        </tr>
                       </tbody>
                   </table>
               </div>
@@ -419,7 +378,7 @@
                       </tr>
                       <tr>
                           <td><code class="table_code">Memory</code></td>
-                          <td>Setting the memory to be used when running a jar file.</td>
+                          <td>Setting the memory to be used when running a jar file. Default is 32GB.</td>
                           <td>No</td>
                       </tr>
                       <tr>
@@ -538,6 +497,57 @@
       }
     });
 
+    $('#sampleDirBtn').on('click', async () => {
+
+      const res = await window.folder.pick();
+      if (!res) return;
+      const { dir, files } = res;
+
+      // 매핑 규칙
+      const bamAbs = [];
+      const bamNames = [];
+
+      for (const f of files) {
+        const ext = f.ext;            // ".bam" 등
+        const name = f.name.toLowerCase();
+
+        if (ext === '.mztab') {
+          $('#searchResultName').text(name).attr('title', f.path);
+
+        } else if (ext === '.bam') {
+          bamAbs.push(f.path);
+          bamNames.push(f.name);
+
+        } else if (ext === '.gtf') {
+          $('#geneAnnotationName').text(name).attr('title', f.path);
+
+        } else if (ext === '.fasta' || ext === '.fa') {
+           $('#proteinSequenceName').text(name).attr('title', f.path);
+
+        } else if (ext === '.tsv' && name.includes('aa_variant')) {
+          $('#aavSequenceName').text(name).attr('title', f.path);
+ 
+        }
+      }
+
+      // BAM은 다중
+      if (bamAbs.length) {
+        $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
+      }
+
+      $('#identifier_index').val('15');
+      $('#peptide_index').val('2');
+      $('#charge_index').val('12');
+      $('#score_index').val('9');
+      $('#output').val('toy_output');
+      $('#memory').val('32');
+      $('#thread').val('4');
+      $('#FDR').val('0.01');
+
+      alert("✅ Sample dataset loaded. Adjust parameters if needed, choose an output folder, then click Start.")
+      
+    });
+
 
     const $log = $('#pXgLogBox');
     const $percLog = $('#percLogBox');
@@ -598,8 +608,7 @@
         $resultLog.find('div').remove();
 
         //debugger
-        const jarFile = $('#locationName').attr('title');
-        //let folderPath = jarFile.replace(/[/\\][^/\\]*$/, '');
+        const jarFile = "./bin/pXg.v2.4.4.jar";
         //setStatus(jarPath, 'err');
   
         var memory = ($('#memory').val() === "" || $('#memory').val() === null) ? "32" : $('#memory').val();
@@ -796,8 +805,13 @@
       window.jarfdr.fdronExit(({ code, signal }) => {
         if (code === 0) {
           setStatus('Finished FDR Control (exit 0)', 'ok');
+          
           const output = $('#output').val();
           const outputDir = $('#outputDirName').attr('title');
+
+          saveDivContent('percLogBox', output+'.percolator.log');
+          saveDivContent('resultLogBox', output+'.fdr_control.log');
+
           location.href = `./result_page.html?output=${output}&outputDir=${outputDir}`;
         } else {
           changeStatus(false);
@@ -806,67 +820,21 @@
       });
     }
 
+    async function saveDivContent(divId, defaultFileName) {
+      const content = document.getElementById(divId).innerText;
+      let outputDir = $('#outputDirName').attr('title');
+      window.logSave.saveLogFile(content, defaultFileName, outputDir);
+    }
+
+
     function changeStatus(status){
 
       $('#startBtn').prop('disabled', status);
       $('#resetBtn').prop('disabled', status);
+      $('#sampleDirBtn').prop('disabled', status);
       $('#identifier_index, #peptide_index, #charge_index, #output, #score_index, #thread, #memory, #FDR').prop('disabled', status);
 
     }
-
-
-    $('#sampleDirBtn').on('click', async () => {
-
-      const res = await window.folder.pick();
-      if (!res) return;
-      const { dir, files } = res;
-      //el('pickedDir').textContent = 'Selected: ' + dir;
-
-      document.getElementById('sampleDirName').title = dir; // 툴팁 표시
-      document.getElementById('sampleDirName').textContent = dir;
-
-      // 매핑 규칙
-      const bamAbs = [];
-      const bamNames = [];
-
-      for (const f of files) {
-        const ext = f.ext;            // ".bam" 등
-        const name = f.name.toLowerCase();
-
-        if (ext === '.mztab') {
-          $('#searchResultName').text(name).attr('title', f.path);
-
-        } else if (ext === '.bam') {
-          bamAbs.push(f.path);
-          bamNames.push(f.name);
-
-        } else if (ext === '.gtf') {
-          $('#geneAnnotationName').text(name).attr('title', f.path);
-
-        } else if (ext === '.fasta' || ext === '.fa') {
-           $('#proteinSequenceName').text(name).attr('title', f.path);
-
-        } else if (ext === '.tsv' && name.includes('aa_variant')) {
-          $('#aavSequenceName').text(name).attr('title', f.path);
- 
-        }
-      }
-
-      // BAM은 다중
-      if (bamAbs.length) {
-        $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
-      }
-
-      $('#identifier_index').val('15');
-      $('#peptide_index').val('2');
-      $('#charge_index').val('12');
-      $('#score_index').val('9');
-      $('#output').val('toy_output');
-      $('#memory').val('32');
-      $('#thread').val('4');
-      $('#FDR').val('0.01');
-      
-    });
 
 
     function appendLine({ stream, line }) {
@@ -883,31 +851,6 @@
     }
 
     function inputValidation() {
-
-      //output folder
-      //jar
-      if($('#outputDirName').attr('title') == 'No folder chosen'){
-        alert('Choose output directory pelease!')
-        //$('#location').focus()
-        return false
-      };
-
-      //jar
-      if($('#locationName').attr('title') == 'No file chosen'){
-        alert('Choose pXg location pelease!')
-        //$('#location').focus()
-        return false
-      };
-
-      var okExt = ['jar'];
-      var ext = $('#locationName').attr('title').split('.').pop().toLowerCase();
-      if(!okExt.includes(ext)){
-        alert('Please upload only .jar file!')
-        $('#locationName').text("No file chosen");
-        $('#locationName').attr('title','No file chosen');
-        //$('#location').focus()
-        return false
-      }
 
       //search file
       if($('#searchResultName').attr('title') == 'No file chosen'){
@@ -1016,6 +959,13 @@
       //output
       if($('#output').val() == null || $('#output').val() == '' || $('#output').val().length == 0){
         alert('Please enter "Output"!')
+        return false
+      };
+
+      //output folder
+      if($('#outputDirName').attr('title') == 'No folder chosen'){
+        alert('Choose output directory pelease!')
+        //$('#location').focus()
         return false
       };
 

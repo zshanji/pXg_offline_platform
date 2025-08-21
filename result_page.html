@@ -84,7 +84,7 @@
         <ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenuButton">
           <li><a class="dropdown-item" href="./index.html">Home</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="./execution.html">Run pXg</a></li>
+          <li><a class="dropdown-item" href="./execution.html">Launch pXg</a></li>
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="https://github.com/HanyangBISLab/pXg" target="_blank">Github</a></li>
           <li><hr class="dropdown-divider"></li>
@@ -95,191 +95,6 @@
   </nav>
 
   <div class="container">
-    <!--
-    <div class="row">
-      <div class="col-12">
-        <h5 class="section-heading">pXg Path</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="location" class="form-label mb-0 me-3" style="width: 9rem;">Location<span class="text-danger ms-1">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="location" onchange="updateFileName(this)">
-                </label>
-                <span id="locationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-        </div> 
-       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        <h5 class="section-heading">Upload Files</h5>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="searchResult" class="form-label mb-0 me-3" style="width: 9rem;">Search result<span class="text-danger ms-1">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="searchResult" onchange="updateFileName(this)">
-                </label>
-                <span id="searchResultName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="geneAnnotation" class="form-label mb-0 me-3" style="width: 9rem;">Gene annotation<span class="text-danger">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="geneAnnotation" onchange="updateFileName(this)">
-                </label>
-                <span id="geneAnnotationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="rnaSeqReads" class="form-label mb-0 me-3" style="width: 9rem;">RNA-seq reads<span class="text-danger">*</span></label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="rnaSeqReads" onchange="updateFileName(this)">
-                </label>
-                <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-      
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="proteinSequence" class="form-label mb-0 me-3" style="width: 9rem;">Protein sequence</label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="proteinSequence" onchange="updateFileName(this)">
-                </label>
-                <span id="proteinSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 mb-3">
-            <div class="upload-box">
-              <div class="d-flex align-items-center">
-                <label for="aavSequence" class="form-label mb-0 me-3" style="width: 9rem;">Amino acid variants</label>
-                <label class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;">
-                  Choose File
-                  <input type="file" id="aavSequence" onchange="updateFileName(this)">
-                </label>
-                <span id="aavSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <h5 class="section-heading" style="margin-top: 1rem;">Parameters</h5>
-        <div class="row mb-3">
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="identifier_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Identifier</label>
-                <input type="text" class="form-control form-control-sm" id="identifier_index" placeholder="Index">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="peptide_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Peptide</label>
-                <input type="text" class="form-control form-control-sm" id="peptide_index" placeholder="Index">
-              </div>
-            </div>
-          </div>
-        
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Charge</label>
-                <input type="text" class="form-control form-control-sm" id="charge_index" placeholder="Index">
-              </div>
-            </div>
-          </div>
-        
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Score</label>
-                <input type="text" class="form-control form-control-sm" id="score_index" placeholder="index">
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="row mb-3">
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Memory</label>
-                <input type="text" class="form-control form-control-sm" id="memory" placeholder="GB">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">Thread</label>
-                <input type="text" class="form-control form-control-sm" id="thread" placeholder="Number">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="charge_index" class="form-label mb-0 me-2" style="white-space: nowrap;">FDR</label>
-                <input type="text" class="form-control form-control-sm" id="FDR" placeholder="0.01">
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="upload-box p-2">
-              <div class="d-flex align-items-center">
-                <label for="output" class="form-label mb-0 me-2" style="white-space: nowrap;">Output</label>
-                <input type="text" class="form-control form-control-sm" id="output" placeholder="Enter output name">
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-12 d-flex justify-content-center">
-          <div class="d-flex gap-3" style="min-width: 320px;">
-            <button class="btn btn-teal btn-sm h-100" id="startBtn" style="min-height: 38px;">Start</button>
-            <button class="btn btn-orange btn-sm h-100" id="resetBtn" style="min-height: 38px;">Reset</button>
-            <button class="btn btn-gray btn-sm h-100" id="toyBtn" style="min-height: 38px;">Samples load</button>
-          </div>
-        </div>
-      </div>
-      -->
-      <div class="row mt-3">
-        <div class="col-12 d-flex" style="justify-content: right !important;">
-          <div class="d-flex gap-3" style="min-width: 200px;">
-            <button class="btn btn-gray btn-sm h-100" id="backBtn" style="min-height: 38px;">Back</button>
-          </div>
-        </div>
-      </div>
 
       <div class="row mt-4">
         <div class="col-12">
@@ -296,34 +111,43 @@
               <div class="row justify-content-center">
                 <div class="col-md-3 mb-3 plot-box1" id="categoryPlot"></div>
               </div>
-            </div>      
+            </div> 
             <p></p>
             <h5 class="section-heading" style="margin-top: 1rem;">Output Files</h5>
             <div class="table-responsive">
               <table class="table table-bordered table-hover align-middle text-center">
                   <thead class="table-light">
                   <tr>
-                      <th>Files</th>
+                      <th>Name</th>
                       <th>Description</th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr>
-                      <td><a href="" id="pxgLink">pxg.pxg</a></td>
-                      <td>This is a main output file and contains a list of identification as TSV format</td>
+                      <td><a href="#" id="pxgLink" data-path="">pxg.pxg</a></td>
+                      <td>Main output file contains a list of identification as TSV format</td>
                   </tr>
                   <tr>
-                      <td><a href="" id="logLink">pxg.log</a></td>
-                      <td>This is a main pxg log file.</td>
+                      <td><a href="#" id="pinLink" data-path="">pXg.pxg.pin</a></td>
+                      <td>Main output file contains a list of identification as PIN format</td>
                   </tr>
                   <tr>
-                      <td><a href="" id="pinLink">pXg.pxg.pin</a></td>
-                      <td>This is a main output file and contains a list of identification as PIN format</td>
+                      <td><a href="#" id="fdrLink" data-path="">fdr.tsv</a></td>
+                      <td>Main output file contains a list of identification after FDR control</td>
                   </tr>
                   <tr>
-                      <td><a href="" id="fdrLink">fdr.tsv</a></td>
-                      <td>This is a main output file and contains a list of identification after FDR control</td>
+                      <td><a href="#" id="logLink" data-path="">pxg.log</a></td>
+                      <td>The file is a pXg execution log.</td>
                   </tr>
+                  <tr>
+                      <td><a href="#" id="perclogLink" data-path="">percolator.log</a></td>
+                      <td>The file is a Percolator execution log.</td>
+                  </tr>
+                  <tr>
+                      <td><a href="#" id="fdrlogLink" data-path="">fdr_control.log</a></td>
+                      <td>The file is a FDR execution log.</td>
+                  </tr>
+                  
                   </tbody>
               </table>
             </div>
@@ -340,11 +164,19 @@
         
         renderPlots();
 
-        $('#backBtn').click(function(){
-          window.location.href = './execution.html'; 
-        });
+    });
+
+    $('#resultDivContent table a').on('click', async function (e) {
+
+      e.preventDefault();
+      const p = $(this).data('path');       // data-path에서 실제 경로 읽기
+      if (!p) { alert('No path.'); return; }
+
+      const res = await window.resultDir.revealInFolder(p);
+      if (!res.ok) alert(`Error: ${res.msg}\nPath: ${res.path || p}`);
 
     });
+
 
     function getDownloadFile(){
       // URL 파라미터 읽기
@@ -357,44 +189,53 @@
       const logName = `${outputName}.pxg.log`;
       const pinName = `${outputName}.pxg.pin`;
       const fdrName = `${outputName}.fdr.tsv`;
+      const perclogName = `${outputName}.percolator.log`;
+      const fdrlogName = `${outputName}.fdr_control.log`;
+
 
       // href는 file URL, download는 파일명만
-      const pxgHref = makeFileHref(outputDir, pxgName);
-      const logHref = makeFileHref(outputDir, logName);
-      const pinHref = makeFileHref(outputDir, pinName);
-      const fdrHref = makeFileHref(outputDir, fdrName);
+      const pxgHref = makeNativePath(outputDir, pxgName);
+      const logHref = makeNativePath(outputDir, logName);
+      const pinHref = makeNativePath(outputDir, pinName);
+      const fdrHref = makeNativePath(outputDir, fdrName);
+      const perclogHref = makeNativePath(outputDir, perclogName);
+      const fdrlogHref = makeNativePath(outputDir, fdrlogName);
+
 
       const pxgLink = document.getElementById("pxgLink");
-      pxgLink.href = pxgHref;
+      pxgLink.dataset.path = pxgHref; 
       pxgLink.textContent = pxgName;
-      pxgLink.download = pxgName;
+      //pxgLink.download = pxgName;
 
       const logLink = document.getElementById("logLink");
-      logLink.href = logHref;
+      logLink.dataset.path = logHref; 
       logLink.textContent = logName;
-      logLink.download = logName;
+      //logLink.download = logName;
 
       const pinLink = document.getElementById("pinLink");
-      pinLink.href = pinHref;
+      pinLink.dataset.path = pinHref;
       pinLink.textContent = pinName;
-      pinLink.download = pinName;
+      //pinLink.download = pinName;
 
       const fdrLink = document.getElementById("fdrLink");
-      fdrLink.href = fdrHref;
+      fdrLink.dataset.path = fdrHref;
       fdrLink.textContent = fdrName;
-      fdrLink.download = fdrName;
+      //fdrLink.download = fdrName;
+
+      const perclogLink = document.getElementById("perclogLink");
+      perclogLink.dataset.path = perclogHref;
+      perclogLink.textContent = perclogName;
+
+      const fdrlogLink = document.getElementById("fdrlogLink");
+      fdrlogLink.dataset.path = fdrlogHref;
+      fdrlogLink.textContent = fdrlogName;
 
     }
 
-    function makeFileHref(dir, filename) {
-
-      // filename: "result.pxg" 같은 파일명
-      const dirNorm = String(dir).replace(/\\/g, '/').replace(/\/+$/, ''); 
-      const full = `${dirNorm}/${filename}`;
-
-      const prefix = /^[A-Za-z]:\//.test(dirNorm) ? 'file:///' : 'file://';
-
-      return encodeURI(prefix + full);
+    function makeNativePath(dir, filename) {
+      const hasSlash = /[\/\\]$/.test(dir);
+      const sep = hasSlash ? '' : (dir.includes('\\') ? '\\' : '/');
+      return dir + sep + filename;
     }
 
     function parseTSV(text) {
@@ -430,6 +271,7 @@
       renderCategoryHistogram(parsed.header, parsed.rows, 'categoryPlot');
     }
 
+
     function renderALLHistogram(header, rows, elementId) {
 
       const plotDiv = document.getElementById(elementId);
@@ -441,7 +283,7 @@
 
       if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
-          필요한 컬럼(Label, IsReference, FastaIDCount) 중 일부가 없습니다.
+          No columns(Label, IsReference, FastaIDCount).
         </div>`;
         return;
       }
@@ -473,9 +315,9 @@
       ];
       const y = [c1, c2, c3, c4];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto',marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'] } };
       const layout = {
-        title: {text:'Barplot for all PSMs'},
+        title: {text:'All PSMs'},
         ///height: heightPx,
         margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -15 },
@@ -497,7 +339,7 @@
 
       if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
-          필요한 컬럼(Label, IsReference, FastaIDCount,FDRFilter) 중 일부가 없습니다.
+          No columns(Label, IsReference, FastaIDCount,FDRFilter).
         </div>`;
         return;
       }
@@ -526,9 +368,9 @@
       ];
       const y = [c1, c2, c3];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' ,marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] } };
       const layout = {
-        title: {text:'Barplot for confident PSMs'},
+        title: {text:'Confident PSMs'},
         ///height: heightPx,
         margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -15 },
@@ -552,7 +394,7 @@
 
       if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
-          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence) 중 일부가 없습니다.
+          No columns(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence)
         </div>`;
         return;
       }
@@ -591,9 +433,9 @@
       ];
       const y = [c1, c2, c3];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' };
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' , marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] } };
       const layout = {
-        title: {text:'Barplot for confident sequences'},
+        title: {text:'Confident peptides'},
         ///height: heightPx,
         margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -15 },
@@ -617,7 +459,7 @@
 
       if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1 || idxLen ==-1) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
-          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, PeptideLength) 중 일부가 없습니다.
+          No columns(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, PeptideLength).
         </div>`;
         return;
       }
@@ -662,16 +504,16 @@
       const y4 = countLen(D);
 
       // trace 4개
-      const trac1 = { x, y:y1, type:'bar', name:"Reference", text:y1.map(String), textposition:'auto'};
-      const trac2 = { x, y:y2, type:'bar', name:"Ambiguous", text:y2.map(String), textposition:'auto' };
-      const trac3 = { x, y:y3, type:'bar', name:"Non-reference", text:y3.map(String), textposition:'auto' };
-      const trac4 = { x, y:y4, type:'bar', name:"Decoy", text:y4.map(String), textposition:'auto' };
+      const trac1 = { x, y:y1, type:'bar', name:"Reference", text:y1.map(String), textposition:'auto',marker:{color:'#1f77b4'}};
+      const trac2 = { x, y:y2, type:'bar', name:"Ambiguous", text:y2.map(String), textposition:'auto' ,marker:{color:'#ff7f0e'}};
+      const trac3 = { x, y:y3, type:'bar', name:"Non-reference", text:y3.map(String), textposition:'auto' ,marker:{color:'#2ca02c'}};
+      const trac4 = { x, y:y4, type:'bar', name:"Decoy", text:y4.map(String), textposition:'auto' ,marker:{color:'#d62728'}};
 
       const data = [trac1, trac2, trac3, trac4];
 
       const layout = {
         title: {
-          text: 'Barplot for a length distribution',
+          text: 'Peptide length distribution',
           y: 0.97  // 타이틀을 살짝 위로 올리기 (0~1 사이, 1=최상단)
         },
         margin: { l:50, r:10, t:80, b:60 }, // top margin 늘려주기
@@ -679,7 +521,7 @@
           title: { text: 'Peptide length' }
         },
         yaxis: { 
-          title: { text: 'Count' }, 
+          //title: { text: 'Count' }, 
           rangemode:'tozero' 
         },
         legend: { 
@@ -696,67 +538,91 @@
     }
 
     function renderCategoryHistogram(header, rows, elementId) {
-
       const plotDiv = document.getElementById(elementId);
       if (!plotDiv) return;
 
-      const idxLabel = header.indexOf('Label');
+      const idxLabel  = header.indexOf('Label');
       const idxIsRef  = header.indexOf('IsReference');
-      const idxFastaC = header.indexOf('FastaIDCount');
-      const idxSeq = header.indexOf('InferredSequence');
+      const idxSeq    = header.indexOf('InferredSequence');
       const idxFilter = header.indexOf('FDRFilter');
       const idxEvents = header.indexOf('Events');
+      const idxAAV    = header.indexOf('AminoAcidVariant');
+      const idxFastaC = header.indexOf('FastaIDCount');
 
-      if (idxLabel === -1 || idxIsRef === -1 || idxFastaC === -1 || idxFilter == -1 || idxSeq == -1 || idxEvents == -1) {
+      if ([idxLabel, idxIsRef, idxSeq, idxFilter, idxEvents, idxAAV, idxFastaC].some(i => i === -1)) {
         plotDiv.innerHTML = `<div style="color:#c00;padding:8px;">
-          필요한 컬럼(Label, IsReference, FastaIDCount, FDRFilter, InferredSequence, Events) 중 일부가 없습니다.
+          No columns(Label, IsReference, FDRFilter, InferredSequence, Events, AminoAcidVariant, FastaIDCount)
         </div>`;
         return;
       }
 
-       const counter = {};
+      const seenSeq = new Set();  
+      const counter = {};
 
       for (const r of rows) {
+        const seq     = String(r[idxSeq] ?? '').trim();
+        if (!seq || seenSeq.has(seq)) continue;  // 같은 InferredSequence는 한 번만 카운트
+        seenSeq.add(seq);
 
-        const label  = parseInt(r[idxLabel], 10);
-        const filter = String(r[idxFilter]);
-        const isRef  = String(r[idxIsRef]).trim().toLowerCase() === 'true';
-        const fastaC = parseInt(r[idxFastaC], 10);
-        const events = String(r[idxEvents]).trim();
+        const label   = toInt(r[idxLabel]);
+        const filter  = String(r[idxFilter] ?? '').trim().toLowerCase();
+        const isRef   = String(r[idxIsRef] ?? '').trim().toLowerCase() === 'true';
+        const events  = String(r[idxEvents] ?? '').trim();
+        const aav     = String(r[idxAAV] ?? '').trim();
+        const fastaC   = toInt(r[idxFastaC]);
 
+        // non-reference + FDR Pass + Label==1 인 경우만 집계
         if (label !== 1) continue;
-        if (filter !== 'Pass') continue;
+        if (filter !== 'pass') continue;
         if (isRef) continue;
-        if (fastaC !== 0) continue;
+        if (fastaC > 0) continue;
 
-        let evKey = events;
-        if (events.includes('|')) evKey = 'Multiple';
-        else if (events.includes('AS')) evKey = 'AS';
+        let key;
+        if (aav && aav !== '-') {
+          key = 'SAAV';
+        } else if (events.includes('|')) {
+          key = 'Multiple';
+        } else if (events.includes('AS')) {
+          key = 'AS';
+        } else if (events.toLowerCase().includes('unknown') || !events) {
+          key = 'Unknown';
+        } else {
+          key = events;
+        }
 
-        counter[evKey] = (counter[evKey] || 0) + 1;
+        counter[key] = (counter[key] || 0) + 1;
       }
 
-      const x = Object.keys(counter);
-      const y = Object.values(counter);
+      const entries = Object.entries(counter).sort((a, b) => b[1] - a[1]);
+
+      const x = entries.map(([k]) => k);
+      const y = entries.map(([_, v]) => v);
 
       const trace = {
         x, y,
         type: 'bar',
         text: y.map(String),
         textposition: 'auto',
-        marker: { color: '#2a9d8f' }
+        marker: { color: '#bebebe' },
+        name: 'FS: Frame shift <br>Multiple: Multiple Events <br>AS: Alternative Splicing <br>SAAV: Single Amino Acid Variant' 
       };
 
       const layout = {
-        title: {text:'Barplot for a category of non-reference peptides'},
-        ///height: heightPx,
-        margin: { l: 40, r: 10, t: 40, b: 60 },
+        title: { text: 'Category of non-reference peptides' },
+        margin: { l: 50, r: 160, t: 60, b: 60 },
         xaxis: { tickangle: -15 },
-        yaxis: { title: 'Count', rangemode: 'tozero' }
+        yaxis: { title: 'Count', rangemode: 'tozero' },
+        showlegend: true, 
+        legend: { 
+          orientation: 'v',  
+          x: 1.05,            
+          y: 1,               
+          xanchor: 'left',   
+          yanchor: 'center'   
+        },
       };
 
       Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
-
     }
 
 
@@ -768,14 +634,6 @@
     function toInt(v) {
       const n = parseInt(String(v).trim(), 10);
       return Number.isFinite(n) ? n : 0;
-    }
-
-    function updateFileName(input) {
-      const spanId = input.id + 'Name';
-      const fileName = input.files.length > 0 ? input.files[0].name : 'No file chosen';
-      const span = document.getElementById(spanId);
-      span.textContent = fileName;
-      span.title = fileName;  // 툴팁 표시
     }
 
 </script>
