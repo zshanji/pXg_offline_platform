@@ -603,7 +603,7 @@
     const $status = $('#status');
 
     const setStatus = (text, cls='') => { $status.text(text).attr('class', cls); };
-    const stripAnsi = (s) => s.replace(/\x1b\[[0-9;]*m/g, '');
+    const stripAnsi = (s) => String(s ?? '').replace(/\x1b\[[0-9;]*m/g, '');
     const addLog = (stream, line) => {
       // 시간 + 라인 추가
       const time = new Date().toLocaleTimeString();
