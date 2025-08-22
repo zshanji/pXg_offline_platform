@@ -307,18 +307,21 @@
         }
       }
 
-      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference','Decoy']
+      const tooltips = ['Peptides originating from protein<br> sequences without any mutations.',
+                        'Peptides originating from sequence<br> variants or non-coding regions.',
+                        'Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Decoy'];
 
       const x = [
         'Reference',
-        'Ambiguous',
         'Non-reference',
+        'Ambiguous',
         'Decoy'
       ];
-      const y = [c1, c2, c3, c4];
+
+      const y = [c1, c3, c2, c4];
 
       const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto',
-                      marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'] },
+                      marker: { color: ['#1f77b4','#2ca02c', '#ff7f0e', '#d62728'] },
                       hovertext:tooltips,
                       hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>'};
       const layout = {
@@ -326,7 +329,7 @@
         ///height: heightPx,
         //margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -45 },
-        yaxis: { title: 'Count', rangemode: 'tozero' },
+        yaxis: {rangemode: 'tozero' , title: { text: 'Number of PSMs' }},
         hovermode:'closest'
       };
 
@@ -368,16 +371,18 @@
         }
       }
 
-      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference']
+      const tooltips = ['Peptides originating from protein<br> sequences without any mutations.',
+                        'Peptides originating from sequence<br> variants or non-coding regions.',
+                        'Non-reference peptides for which protein<br> evidence exists in the protein sequence database.'];
 
       const x = [
         'Reference',
-        'Ambiguous',
-        'Non-reference'
+        'Non-reference',
+        'Ambiguous'
       ];
-      const y = [c1, c2, c3];
+      const y = [c1, c3, c2];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' ,marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] },
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' ,marker: { color: ['#1f77b4', '#2ca02c', '#ff7f0e'] },
                       hovertext:tooltips,
                       hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>' };
       const layout = {
@@ -385,7 +390,8 @@
         ///height: heightPx,
         //margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -45 },
-        yaxis: { title: 'Count', rangemode: 'tozero' }
+        yaxis: {rangemode: 'tozero' , title: { text: 'Number of confident PSMs' }},
+        hovermode:'closest'
       };
 
       Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
@@ -439,14 +445,16 @@
 
       const x = [
         'Reference',
-        'Ambiguous',
-        'Non-reference'
+        'Non-reference',
+        'Ambiguous'
       ];
-      const y = [c1, c2, c3];
+      const y = [c1, c3, c2];
 
-      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference'];
+      const tooltips = ['Peptides originating from protein<br> sequences without any mutations.',
+                        'Peptides originating from sequence<br> variants or non-coding regions.',
+                        'Non-reference peptides for which protein<br> evidence exists in the protein sequence database.'];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' , marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] },
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' , marker: { color: ['#1f77b4', '#2ca02c','#ff7f0e'] },
                       hovertext:tooltips,
                       hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>' };
       const layout = {
@@ -454,7 +462,8 @@
         ///height: heightPx,
         //margin: { l: 40, r: 10, t: 40, b: 60 },
         xaxis: { tickangle: -45 },
-        yaxis: { title: 'Count', rangemode: 'tozero' }
+        yaxis: {rangemode: 'tozero' , title: { text: 'Number of confident peptides' }},
+        hovermode:'closest'
       };
 
       Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
@@ -531,21 +540,25 @@
 
       const trac1 = { x, y: toGroupProportion(y1), type:'bar', name:"Reference",
         text: y1.map(String), textposition:'auto', 
+        hovertemplate: 'Proportion: %{y}<br>Count: %{text}<extra></extra>',
         marker:{color:'#1f77b4'}};
 
       const trac2 = { x, y: toGroupProportion(y2), type:'bar', name:"Ambiguous",
         text: y2.map(String), textposition:'auto', 
+        hovertemplate: 'Proportion: %{y}<br>Count: %{text}<extra></extra>',
         marker:{color:'#ff7f0e'}};
 
       const trac3 = { x, y: toGroupProportion(y3), type:'bar', name:"Non-reference",
         text: y3.map(String), textposition:'auto',
+        hovertemplate: 'Proportion: %{y}<br>Count: %{text}<extra></extra>',
         marker:{color:'#2ca02c'}};
 
       const trac4 = { x, y: toGroupProportion(y4), type:'bar', name:"Decoy",
         text: y4.map(String), textposition:'auto', 
+        hovertemplate: 'Proportion: %{y}<br>Count: %{text}<extra></extra>',
         marker:{color:'#d62728'}};
 
-      const data = [trac1, trac2, trac3, trac4];
+      const data = [trac1, trac3,trac2, trac4];
 
       const layout = {
         title: {
@@ -667,7 +680,11 @@
         title: { text: 'Category of non-reference peptides' },
         //margin: { l: 50, r: 160, t: 60, b: 60 },
         xaxis: { tickangle: -45 },
-        yaxis: { title: 'Count', rangemode: 'tozero' },
+        yaxis: { 
+          title: { text: 'Number of peptides' }, 
+          rangemode:'tozero' 
+        },
+        hovermode:'closest'
         /*showlegend: true, 
         legend: { 
           orientation: 'v',  
