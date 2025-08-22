@@ -109,6 +109,7 @@
                 <label for="searchResult" class="form-label mb-0 me-3" style="width: 9rem;">Search result<span class="text-danger ms-1">*</span></label>
                 <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="searchResult">Choose File</button>
                 <span id="searchResultName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearsearchResult"></button>
               </div>
             </div>
           </div>
@@ -119,6 +120,7 @@
                 <label for="geneAnnotation" class="form-label mb-0 me-3" style="width: 9rem;">Gene annotation<span class="text-danger">*</span></label>
                 <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="geneAnnotation">Choose File</button>
                 <span id="geneAnnotationName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="cleargeneAnnotation"></button>
               </div>
             </div>
           </div>
@@ -127,8 +129,9 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="rnaSeqReads" class="form-label mb-0 me-3" style="width: 9rem;">RNA-seq reads<span class="text-danger">*</span></label>
-                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="rnaSeqReads">Choose File</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="rnaSeqReads">Choose File</button>
                 <span id="rnaSeqReadsName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearrnaSeqReads"></button>
               </div>
             </div>
           </div>
@@ -139,6 +142,7 @@
                 <label for="proteinSequence" class="form-label mb-0 me-3" style="width: 9rem;">Protein sequence</label>
                 <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="proteinSequence">Choose File</button>
                 <span id="proteinSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearproteinSequence"></button>
               </div>
             </div>
           </div>
@@ -149,6 +153,7 @@
                 <label for="aavSequence" class="form-label mb-0 me-3" style="width: 9rem;">Amino acid variants</label>
                 <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 6rem;"  id="aavSequence">Choose File</button>
                 <span id="aavSequenceName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No file chosen">No file chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearaavSequence"></button>
               </div>
             </div>
           </div>
@@ -249,6 +254,7 @@
                 <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Location<span class="text-danger ms-1">*</span></label>
                 <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
                 <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
+                <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearoutputDir"></button>
               </div>
             </div>
           </div>
@@ -419,24 +425,46 @@
     $(function() {
 
         $('#resetBtn').click(function () {
-          const fileIds = ['searchResult', 'geneAnnotation', 'rnaSeqReads', 'proteinSequence','aavSequence','location'];
+          const fileIds = ['searchResult', 'geneAnnotation', 'rnaSeqReads', 'proteinSequence','aavSequence'];
           fileIds.forEach(function (id) {
-            $('#' + id).val('');
             $('#' + id + 'Name').text('No file chosen').attr('title', 'No file chosen');
           });
+
           $('#identifier_index, #peptide_index, #charge_index, #output, #score_index').val('');
 
           $('#memory').val('32');
           $('#thread').val('4');
           $('#FDR').val('0.01');
 
-          $('#sampleDirName, #outputDirName').text('No folder chosen').attr('title', 'No folder chosen');
+          $('#outputDirName').text('No folder chosen').attr('title', 'No folder chosen');
         });
+
+        $('#clearsearchResult').click(function(){
+            $('#searchResultName').text('No file chosen').attr('title', 'No file chosen');
+        })
+        $('#cleargeneAnnotation').click(function(){
+            $('#geneAnnotationName').text('No file chosen').attr('title', 'No file chosen');
+        })
+        $('#clearrnaSeqReads').click(function(){
+            $('#rnaSeqReadsName').text('No file chosen').attr('title', 'No file chosen');
+        })
+        $('#clearproteinSequence').click(function(){
+            $('#proteinSequenceName').text('No file chosen').attr('title', 'No file chosen');
+        })
+        $('#clearaavSequence').click(function(){
+          $('#aavSequenceName').val('');
+            $('#aavSequenceName').text('No file chosen').attr('title', 'No file chosen');
+        })
+         $('#clearoutputDirName').click(function(){
+          $('#outputDirNameName').val('');
+            $('#outputDirNameName').text('No folder chosen').attr('title', 'No folder chosen');
+        })
 
     });
 
     $('#outputDir').on('click', async () => {
       const dir = await window.folderDir.pickDir();
+      $('#outputDirName').attr('title', '').text('');
       if (dir) {
         $('#outputDirName').attr('title', dir).text(dir);
       }
@@ -445,6 +473,7 @@
 
     $('#location').on('click', async () => {
       const file = await window.file.pickFile();
+      $('#locationName').attr('title','').text('');
       if (file) {
         $('#locationName').attr('title', file.absPath).text(file.name)
       }
@@ -452,6 +481,7 @@
 
     $('#searchResult').on('click', async () => {
       const file = await window.file.pickFile();
+      $('#searchResultName').attr('title','').text('');
       if (file) {
         $('#searchResultName').attr('title', file.absPath).text(file.name)
       }
@@ -459,6 +489,7 @@
     
      $('#geneAnnotation').on('click', async () => {
       const file = await window.file.pickFile();
+      $('#geneAnnotationName').attr('title','').text('');
       if (file) {
         $('#geneAnnotationName').attr('title', file.absPath).text(file.name)
       }
@@ -467,24 +498,38 @@
     $('#rnaSeqReads').on('click', async () => {
 
       const files = await window.files.pickFiles();
+      var bamAbs = []
+      var bamNames = []
       if (files) {
-
-        var bamAbs = []
-        var bamNames = []
-
         files.forEach(f => {
           bamAbs.push(f.absPath)
           bamNames.push(f.name)
         });
-
-        if (bamAbs.length) {
-          $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
-        }
       }
+
+      var allAbs = [];
+      var preBamAbs = $('#rnaSeqReadsName').attr('title');
+      if(preBamAbs!='No file chosen'){
+        allAbs = allAbs.concat(preBamAbs.split(','));
+      }
+
+      if(bamAbs.length){
+        allAbs = allAbs.concat(bamAbs)
+      }
+
+      allAbs = [...new Set(allAbs.map(s => s.trim()))];
+
+      if (allAbs.length == 1) {
+        $('#rnaSeqReadsName').text(bamNames[0]).attr('title', allAbs.join(','));  
+      } else{
+        $('#rnaSeqReadsName').text(bamNames[0] + '(+' + (allAbs.length - 1) + ' more)').attr('title', allAbs.join(','));
+      }
+
     });
 
      $('#proteinSequence').on('click', async () => {
       const file = await window.file.pickFile();
+      $('#proteinSequenceName').attr('title','').text('');
       if (file) {
         $('#proteinSequenceName').attr('title', file.absPath).text(file.name)
       }
@@ -492,6 +537,7 @@
 
     $('#aavSequence').on('click', async () => {
       const file = await window.file.pickFile();
+      $('#aavSequenceName').attr('title','').text('');
       if (file) {
         $('#aavSequenceName').attr('title', file.absPath).text(file.name)
       }
@@ -514,7 +560,7 @@
         if (ext === '.mztab') {
           $('#searchResultName').text(name).attr('title', f.path);
 
-        } else if (ext === '.bam') {
+        } else if (ext === '.bam'||ext === '.sam') {
           bamAbs.push(f.path);
           bamNames.push(f.name);
 
@@ -531,8 +577,10 @@
       }
 
       // BAM은 다중
-      if (bamAbs.length) {
+      if (bamAbs.length>1) {
         $('#rnaSeqReadsName').text(bamNames[0]+'(+1 more)').attr('title', bamAbs.join(','));
+      }else{
+        $('#rnaSeqReadsName').text(bamNames[0]).attr('title', bamAbs.join(','));
       }
 
       $('#identifier_index').val('15');

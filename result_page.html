@@ -307,6 +307,8 @@
         }
       }
 
+      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference','Decoy']
+
       const x = [
         'Reference',
         'Ambiguous',
@@ -315,16 +317,21 @@
       ];
       const y = [c1, c2, c3, c4];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto',marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'] } };
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto',
+                      marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'] },
+                      hovertext:tooltips,
+                      hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>'};
       const layout = {
         title: {text:'All PSMs'},
         ///height: heightPx,
-        margin: { l: 40, r: 10, t: 40, b: 60 },
-        xaxis: { tickangle: -15 },
-        yaxis: { title: 'Count', rangemode: 'tozero' }
+        //margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -45 },
+        yaxis: { title: 'Count', rangemode: 'tozero' },
+        hovermode:'closest'
       };
 
-      Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+     var myPlot = Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });
+
     }
 
     function renderConfidentHistogram(header, rows, elementId) {
@@ -361,6 +368,8 @@
         }
       }
 
+      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference']
+
       const x = [
         'Reference',
         'Ambiguous',
@@ -368,12 +377,14 @@
       ];
       const y = [c1, c2, c3];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' ,marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] } };
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' ,marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] },
+                      hovertext:tooltips,
+                      hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>' };
       const layout = {
         title: {text:'Confident PSMs'},
         ///height: heightPx,
-        margin: { l: 40, r: 10, t: 40, b: 60 },
-        xaxis: { tickangle: -15 },
+        //margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -45 },
         yaxis: { title: 'Count', rangemode: 'tozero' }
       };
 
@@ -433,12 +444,16 @@
       ];
       const y = [c1, c2, c3];
 
-      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' , marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] } };
+      const tooltips = ['Reference','Non-reference peptides for which protein<br> evidence exists in the protein sequence database.','Non-reference'];
+
+      const trace = { x, y, type: 'bar', text: y.map(String), textposition: 'auto' , marker: { color: ['#1f77b4', '#ff7f0e', '#2ca02c'] },
+                      hovertext:tooltips,
+                      hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>' };
       const layout = {
         title: {text:'Confident peptides'},
         ///height: heightPx,
-        margin: { l: 40, r: 10, t: 40, b: 60 },
-        xaxis: { tickangle: -15 },
+        //margin: { l: 40, r: 10, t: 40, b: 60 },
+        xaxis: { tickangle: -45 },
         yaxis: { title: 'Count', rangemode: 'tozero' }
       };
 
@@ -505,27 +520,29 @@
       const y3 = countLen(C);
       const y4 = countLen(D);
 
-      const allPep = y1.concat(y2, y3, y4).reduce((sum, v) => sum + v, 0);
 
-      // 비율로 변환 (각 count / allPep)
-      function toProportion(arr) {
-        return arr.map(v => Number((v / allPep).toFixed(2)));
+      // 그룹별 비율 변환 함수
+      function toGroupProportion(arr) {
+        if (!Array.isArray(arr) || arr.length === 0) return arr.map(() => 0);
+        const total = arr.reduce((a, b) => a + b, 0);
+        if (total === 0) return arr.map(() => 0);
+        return arr.map(v => Number((v / total).toFixed(2)));
       }
 
-      const trac1 = { x, y: toProportion(y1), type:'bar', name:"Reference",
-        text: y1.map(String), textposition:'auto',
+      const trac1 = { x, y: toGroupProportion(y1), type:'bar', name:"Reference",
+        text: y1.map(String), textposition:'auto', 
         marker:{color:'#1f77b4'}};
 
-      const trac2 = { x, y: toProportion(y2), type:'bar', name:"Ambiguous",
-        text: y2.map(String), textposition:'auto',
+      const trac2 = { x, y: toGroupProportion(y2), type:'bar', name:"Ambiguous",
+        text: y2.map(String), textposition:'auto', 
         marker:{color:'#ff7f0e'}};
 
-      const trac3 = { x, y: toProportion(y3), type:'bar', name:"Non-reference",
+      const trac3 = { x, y: toGroupProportion(y3), type:'bar', name:"Non-reference",
         text: y3.map(String), textposition:'auto',
         marker:{color:'#2ca02c'}};
 
-      const trac4 = { x, y: toProportion(y4), type:'bar', name:"Decoy",
-        text: y4.map(String), textposition:'auto',
+      const trac4 = { x, y: toGroupProportion(y4), type:'bar', name:"Decoy",
+        text: y4.map(String), textposition:'auto', 
         marker:{color:'#d62728'}};
 
       const data = [trac1, trac2, trac3, trac4];
@@ -550,7 +567,7 @@
           xanchor: 'center', 
           yanchor: 'bottom' 
         },
-        bargap: 0.2       
+        bargap: 0.5       
         //bargroupgap: 
       };
       Plotly.newPlot(plotDiv, data, layout, { responsive: true });
@@ -617,28 +634,48 @@
       const x = entries.map(([k]) => k);
       const y = entries.map(([_, v]) => v);
 
+      // 설명 사전
+      const descriptions = {
+        'FS': 'Frameshift',
+        'AS': 'Alternative splicing',
+        'SAAV': 'Single amino acid variant',
+        'Multiple': 'Multiple events',
+        "Unknown":"Unknown",
+        "PC":"Protein coding",
+        "3`-UTR":"3` untranslated region",
+        "5`-UTR":"5` untranslated region",
+        "asRNA":"Antisense RNA",
+        "IGR":"Intergenic region",
+        "IR":"Intron Region",
+        "ncRNA":"Non-coding RNA"
+      };
+
+      const hovertext = x.map(label => descriptions[label] || 'Other');
+
       const trace = {
         x, y,
         type: 'bar',
         text: y.map(String),
         textposition: 'auto',
         marker: { color: '#bebebe' },
-        name: 'FS: Frame shift <br>Multiple: Multiple Events <br>AS: Alternative Splicing <br>SAAV: Single Amino Acid Variant' 
+        hovertext:hovertext,
+        hovertemplate: '<i>%{x}</i>: %{hovertext}' + '<br>Count: %{y:,}<extra></extra>'
+        //name: 'FS: Frame shift <br>Multiple: Multiple Events <br>AS: Alternative Splicing <br>SAAV: Single Amino Acid Variant' 
       };
 
       const layout = {
         title: { text: 'Category of non-reference peptides' },
-        margin: { l: 50, r: 160, t: 60, b: 60 },
-        xaxis: { tickangle: -15 },
+        //margin: { l: 50, r: 160, t: 60, b: 60 },
+        xaxis: { tickangle: -45 },
         yaxis: { title: 'Count', rangemode: 'tozero' },
-        showlegend: true, 
+        /*showlegend: true, 
         legend: { 
           orientation: 'v',  
           x: 1.05,            
           y: 1,               
           xanchor: 'left',   
           yanchor: 'center'   
-        },
+        },*/
       };
 
       Plotly.newPlot(plotDiv, [trace], layout, { responsive: true });

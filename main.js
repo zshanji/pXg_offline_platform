@@ -3,7 +3,7 @@ import { spawn,execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
-import { promises as fsp,existsSync } from 'fs';
+import { promises as fsp,existsSync,accessSync, constants } from 'fs';
 
 
 function log(...a){ console.log("[MAIN]", ...a); }
@@ -99,26 +99,62 @@ function quoteArg(a) {
 /* ---------------------------
  *  실행 파일 경로 탐색 함수
  * --------------------------- */
-function findExecutable(cmd, extraPaths = []) {
+function isExecutable(p) {
   try {
-    if (process.platform === 'win32') {
-      // Windows: where 명령 사용
-      const out = execSync(`where ${cmd}`, { stdio: ['ignore', 'pipe', 'ignore'] })
-        .toString().split(/\r?\n/)[0].trim();
-      if (existsSync(out)) return out;
-    } else {
-      // macOS/Linux: which 명령 사용
-      const out = execSync(`which ${cmd}`, { stdio: ['ignore', 'pipe', 'ignore'] })
-        .toString().split(/\r?\n/)[0].trim();
-      if (existsSync(out)) return out;
+    accessSync(p, constants.X_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function findExecutable(cmd, extraPaths = []) {
+  
+  const isWin = process.platform === 'win32';
+
+  // 1) PATH 보강 (특히 macOS GUI/Electron용)
+  const pathSep = isWin ? ';' : ':';
+  const defaultMacPaths = ['/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'];
+  const patchedPATH = (process.env.PATH || '')
+    + (process.platform === 'darwin' ? pathSep + defaultMacPaths.join(pathSep) : '');
+
+  // 2) 우선: 셸 내장 탐색 (command -v / where)
+  try {
+    const cmdline = isWin
+      ? `where ${cmd}`
+      : `sh -c "command -v ${cmd} 2>/dev/null"`;
+    const out = execSync(cmdline, {
+      stdio: ['ignore', 'pipe', 'ignore'],
+      env: { ...process.env, PATH: patchedPATH }
+    }).toString().split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+
+    for (const p of out) {
+      if (existsSync(p) && isExecutable(p)) return p;
     }
   } catch (e) {
-    // 못 찾으면 아래 extraPaths에서 검색
-    for (const p of extraPaths) {
-      if (existsSync(p)) return p;
+    // ignore and fall through to manual search
+  }
+
+  // 3) 직접 PATH 탐색 (PATHEXT 포함 for Windows)
+  const pathDirs = (patchedPATH || '').split(pathSep).filter(Boolean);
+  const candExts = isWin
+    ? (process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM').split(';')
+    : [''];
+
+  for (const dir of pathDirs) {
+    for (const ext of candExts) {
+      const p = join(dir, isWin ? (cmd.endsWith(ext) ? cmd : cmd + ext) : cmd);
+      if (existsSync(p) && isExecutable(p)) return p;
     }
   }
-  return cmd; 
+
+  // 4) extraPaths도 확인
+  for (const p of extraPaths) {
+    if (existsSync(p) && isExecutable(p)) return p;
+  }
+
+  // 5) 못 찾음 -> null 반환 (중요!)
+  return null;
 }
 
 function getJarPath() {
