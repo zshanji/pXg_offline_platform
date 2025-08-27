@@ -18,7 +18,6 @@ process.on("unhandledRejection", logErr);
 
 
 let mainWindow;
-const RES_DIR = app.isPackaged ? process.resourcesPath : __dirname;
 
 function createWindow(openFilePath) {
   mainWindow = new BrowserWindow({
@@ -101,59 +100,71 @@ function quoteArg(a) {
  * --------------------------- */
 function isExecutable(p) {
   try {
-    accessSync(p, constants.X_OK);
-    return true;
-  } catch {
-    return false;
-  }
+    return existsSync(p);
+  } catch { return false; }
 }
 
 function findExecutable(cmd, extraPaths = []) {
-  
   const isWin = process.platform === 'win32';
+  const sep = isWin ? ';' : ':';
 
-  // 1) PATH 보강 (특히 macOS GUI/Electron용)
-  const pathSep = isWin ? ';' : ':';
-  const defaultMacPaths = ['/opt/homebrew/bin', '/usr/local/bin', '/usr/bin', '/bin'];
-  const patchedPATH = (process.env.PATH || '')
-    + (process.platform === 'darwin' ? pathSep + defaultMacPaths.join(pathSep) : '');
+  // macOS 기본 경로들 (우선순위 높은 순)
+  const macPaths = [
+    '/opt/homebrew/opt/openjdk/bin',
+    '/opt/homebrew/bin',
+    '/usr/local/opt/openjdk/bin',
+    '/usr/local/bin',
+    '/usr/bin',
+    '/bin',
+  ];
 
-  // 2) 우선: 셸 내장 탐색 (command -v / where)
+  // 터미널이 아닌 환경(Electron/GUI) 대비: macOS는 PATH를 앞에(prepend)
+  const basePATH = process.env.PATH || '';
+  const patchedPATH = process.platform === 'darwin'
+    ? macPaths.join(sep) + (basePATH ? (sep + basePATH) : '')
+    : basePATH;
+
+  // which/where 로 최우선 탐색
   try {
-    const cmdline = isWin
-      ? `where ${cmd}`
-      : `sh -c "command -v ${cmd} 2>/dev/null"`;
+    const cmdline = isWin ? `where ${cmd}` : `which ${cmd}`;
     const out = execSync(cmdline, {
       stdio: ['ignore', 'pipe', 'ignore'],
-      env: { ...process.env, PATH: patchedPATH }
+      env: { ...process.env, PATH: patchedPATH },
     }).toString().split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
     for (const p of out) {
-      if (existsSync(p) && isExecutable(p)) return p;
+      if (isExecutable(p)) return p;
     }
-  } catch (e) {
-    // ignore and fall through to manual search
+  } catch { /* ignore and continue */ }
+
+  // macOS 기본 경로 직접 확인 (darwin에서만)
+  if (process.platform === 'darwin') {
+    for (const dir of macPaths) {
+      const p = join(dir, cmd);
+      if (isExecutable(p)) return p;
+    }
   }
 
-  // 3) 직접 PATH 탐색 (PATHEXT 포함 for Windows)
-  const pathDirs = (patchedPATH || '').split(pathSep).filter(Boolean);
+  // extraPaths 확인 (파일이면 그대로, 폴더면 join)
+  for (const ep of extraPaths) {
+    const p = (ep.endsWith('/') || ep.endsWith('\\')) ? join(ep, cmd) : ep;
+    if (isExecutable(p)) return p;
+  }
+
+  // (옵션) 마지막 보루: PATH 수동 스캔
+  const pathDirs = (patchedPATH || '').split(sep).filter(Boolean);
   const candExts = isWin
     ? (process.env.PATHEXT || '.EXE;.CMD;.BAT;.COM').split(';')
     : [''];
 
   for (const dir of pathDirs) {
     for (const ext of candExts) {
-      const p = join(dir, isWin ? (cmd.endsWith(ext) ? cmd : cmd + ext) : cmd);
-      if (existsSync(p) && isExecutable(p)) return p;
+      const leaf = isWin ? (cmd.toUpperCase().endsWith(ext) ? cmd : cmd + ext) : cmd;
+      const p = join(dir, leaf);
+      if (isExecutable(p)) return p;
     }
   }
 
-  // 4) extraPaths도 확인
-  for (const p of extraPaths) {
-    if (existsSync(p) && isExecutable(p)) return p;
-  }
-
-  // 5) 못 찾음 -> null 반환 (중요!)
   return null;
 }
 
@@ -191,9 +202,9 @@ ipcMain.handle('jar:start', async (evt, payload = {}) => {
     process.platform === 'win32' ? 'java.exe' : 'java',
     process.platform === 'darwin'
       ? [
-          '/usr/bin/java',
-          '/opt/homebrew/bin/java', 
-          '/usr/local/bin/java'  
+        '/opt/homebrew/bin/java',   
+        '/usr/bin/java',
+        '/usr/local/bin/java'  
         ]
       : []
   );
@@ -245,8 +256,8 @@ ipcMain.handle('jarfdr:start', async (evt, payload = {}) => {
     process.platform === 'win32' ? 'java.exe' : 'java',
     process.platform === 'darwin'
       ? [
+          '/opt/homebrew/bin/java',   
           '/usr/bin/java',
-          '/opt/homebrew/bin/java', 
           '/usr/local/bin/java'  
         ]
       : []
