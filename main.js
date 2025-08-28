@@ -133,7 +133,11 @@ function findExecutable(cmd, extraPaths = []) {
     }).toString().split(/\r?\n/).map(s => s.trim()).filter(Boolean);
 
     for (const p of out) {
-      if (isExecutable(p)) return p;
+
+      if (isExecutable(p)) {
+        console.log(`${cmd} file was found by command`);
+        return p;
+      }
     }
   } catch { /* ignore and continue */ }
 

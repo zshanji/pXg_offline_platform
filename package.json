@@ -18,7 +18,7 @@
     "appId": "com.example.pxgoffline",
     "productName": "pXg-GUI",
     "asar": true,
-    "asarUnpack": ["bin/**/*"],
+    "asarUnpack": ["bin/**/*","toy_samples/**/*"],
     "directories": {
       "output": "dist"
     },
@@ -34,7 +34,8 @@
       "js/**/*"
     ],
     "extraResources": [
-      { "from": "bin", "to": "bin" } 
+      { "from": "bin", "to": "bin" } ,
+      { "from": "toy_samples", "to": "toy_samples" } 
     ],
     "mac": {
       "target": [ "dir" ],
