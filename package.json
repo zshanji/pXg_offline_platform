@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "main.js",
   "type": "module",
-  "author": "ZSJ",
+  "author": "BIS",
   "description": "pXg offline app",
   "scripts": {
     "start": "electron .",
@@ -40,7 +40,7 @@
     "mac": {
       "target": [ "dir" ],
       "category": "public.app-category.developer-tools",
-      "icon": "build/icon.ico",
+      "icon": "icon/app.ico",
       "hardenedRuntime": false,  
       "gatekeeperAssess": false
     },
@@ -55,7 +55,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "build/icon.ico",
+      "icon": "icon/app.ico",
       "artifactName": "pXg-GUI-${version}-${arch}.exe"
     },
     "nsis": {

@@ -71,6 +71,30 @@
       color: var(--bs-code-color);
       word-wrap: break-word;
     }
+    #homeDivContent .badge-yes{background:#e6fff9;color:#108a78;border:1px solid #9be0d6;font-weight:600}
+    #homeDivContent .badge-no{background:#fff3e6;color:#9a5a14;border:1px solid #f7c089;font-weight:600}
+
+    .table thead th {
+      background-color: #eaf7f8;   
+      color: #2f8f96;             
+      font-weight: 600;
+      border-bottom: 2px solid #3CAEB7;
+      font-size: 1rem;
+    }
+    .table tbody td {
+      font-size: 1rem;
+      color: #495057;             
+      padding: 0.75rem;
+      vertical-align: middle;
+    }
+    .table tbody tr:hover {
+      background-color: #f9fcfc;
+      transition: background-color 0.2s ease;
+    }
+    .table tbody td:first-child {
+      font-weight: 500;
+      color: #2f8f96;
+    }
   </style>
 </head>
 <body>
@@ -252,7 +276,7 @@
             <div class="upload-box">
               <div class="d-flex align-items-center">
                 <label for="outputDir" class="form-label mb-0 me-3" style="width: 9rem;">Location<span class="text-danger ms-1">*</span></label>
-                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 7rem;"  id="outputDir">Choose Folder</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm custom-file-upload me-2 mb-0" style="width: 8rem;"  id="outputDir">Choose Folder</button>
                 <span id="outputDirName" class="text-muted small flex-grow-1 text-truncate" style="max-width: 20rem;" title="No folder chosen">No folder chosen</span>
                 <button type="button" class="btn-close ms-2" aria-label="Clear" id="clearoutputDir"></button>
               </div>
@@ -277,13 +301,21 @@
         <div class="col-12">
           <div id="homeDivContent">
               <h5 class="section-heading">Usage</h5>
-              <p class="text-muted">
-                  <strong>pXg</strong> can be integrated with any search engines such as 
-                  <a href="https://www.bioinfor.com/peaks/" target="_blank">PEAKS</a> and 
-                  <a href="https://github.com/bzhanglab/pNovo3" target="_blank">pNovo3</a>. It was developed for the reliable identification of noncanonical MAPs from de novo peptide sequencing; however, it can also be used to capture the number of reads mapped to each peptide sequence.
-              </p>
+              <div class="alert alert-info d-flex align-items-start" style="border-left:4px solid #3CAEB7; background:#f8fdfe;">
+                <i class="bi bi-info-circle-fill me-2 mt-1" style="color:#3CAEB7; font-size:1.2rem;"></i>
+                <div>
+                <strong>pXg</strong> can be integrated with any search engines such as
+                <a href="https://www.bioinfor.com/peaks/" target="_blank" rel="noopener">PEAKS</a> and
+                <a href="https://github.com/bzhanglab/pNovo3" target="_blank" rel="noopener">pNovo3</a>.<br>
+                It was developed for the reliable identification of <em>noncanonical MAPs</em> from de novo peptide sequencing;
+                however, it can also be used to capture the number of reads mapped to each peptide sequence.
+                </div>
+              </div>
         
-              <h6 class="mb-2">Input format</h6>
+              <h6 class="mb-2 section-heading" style="font-size:1.1rem; display:flex; align-items:center; gap:.4rem;">
+                <i class="bi bi-table" style="color:#3CAEB7;"></i>
+                Input format
+              </h6>
               <div class="table-responsive mb-4">
                   <table class="table table-bordered table-hover align-middle text-center">
                       <thead class="table-light">
@@ -305,7 +337,7 @@
                             <a href="https://github.com/Noble-Lab/casanovo" target="_blank">Casanovo</a>)
                             </td>
                             <td>TSV or CSV</td>
-                            <td>Yes</td>
+                            <td><span class="badge badge-yes">Yes</span></td>
                         </tr>
                         <tr>
                             <td>Gene annotation</td>
@@ -315,28 +347,28 @@
                             <a href="https://www.ensembl.org/" target="_blank">Ensembl</a>)
                             </td>
                             <td>GTF</td>
-                            <td>Yes</td>
+                            <td><span class="badge badge-yes">Yes</span></td>
                         </tr>
                         <tr>
                             <td>RNA-Seq reads</td>
                             <td>
                             Mapped and unmapped RNA-Seq reads. The file must be sorted by coordinates. 
-                            Multiple SAM/BAM files should be separated by comma (,)
+                            <br>Multiple SAM/BAM files should be separated by comma (,)
                             </td>
                             <td>SAM/BAM</td>
-                            <td>Yes</td>
+                            <td><span class="badge badge-yes">Yes</span></td>
                         </tr>
                         <tr>
                             <td>Protein sequences</td>
                             <td>Canonical and contaminant protein sequences (e.g. UniProt)</td>
                             <td>Fasta</td>
-                            <td>No</td>
+                            <td><span class="badge badge-no">No</span></td>
                         </tr>
                         <tr>
                             <td>Amino acid variant</td>
                             <td>Amino acid variant</td>
                             <td>tsv</td>
-                            <td>No</td>
+                            <td><span class="badge badge-no">No</span></td>
                         </tr>
 
                         <tr>
@@ -345,62 +377,74 @@
                           The working directory is where execution results will be saved.
                           </td>
                           <td>Directory</td>
-                          <td>Yes</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                         </tr>
                       </tbody>
                   </table>
               </div>
               
-              <h6 class="mb-2">List of Parameters</h6>
+              <h6 class="mb-2 section-heading" style="font-size:1.1rem; display:flex; align-items:center; gap:.4rem;">
+                <i class="bi bi-sliders" style="color:#F28C28;"></i>
+                List of Parameters
+              </h6>
               <div class="table-responsive mb-4">
                   <table class="table table-bordered table-hover align-middle text-center">
                       <thead class="table-light">
                       <tr>
                           <th>Option</th>
                           <th>Description</th>
+                          <th>Value</th>
                           <th>Mandatory</th>
                       </tr>
                       </thead>
                       <tbody>
                       <tr>
                           <td><code class="table_code">Identifier_index</code></td>
-                          <td>Identifier_index is the 1-based column index of a unique spectrum identifier. To combine multiple columns, provide comma-separated indices without spaces (e.g., --identifier_index 1,2,3).</td>
-                          <td>Yes</td>
+                          <td>PSM identifier indicies (one-based). One or more indicies can be specified by comma separated. <br>ex> 3,5,7.</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Peptide_index</code></td>
-                          <td>Peptide_index is the 1-based column index of peptide sequences in the PSM file.</td>
-                          <td>Yes</td>
+                          <td>Peptide index in the psm file.</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Charge_index</code></td>
-                          <td>Charge_index is the 1-based column index for charge state.</td>
-                          <td>Yes</td>
+                          <td>Charge state index in the psm file.</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Score_index</code></td>
-                          <td>Score_index is the 1-based column index for score.</td>
-                          <td>Yes</td>
+                          <td>Score index in the psm file.</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Memory</code></td>
                           <td>Setting the memory to be used when running a jar file. Default is 32GB.</td>
-                          <td>No</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-no">No</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Threads</code></td>
                           <td>The number of threads. Default is 4.</td>
-                          <td>No</td>
+                          <td>Integer</td>
+                          <td><span class="badge badge-no">No</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">FDR</code></td>
-                          <td>False discovery rate.</td>
-                          <td>Yes</td>
+                          <td>False discovery rate. Default is 0.01</td>
+                          <td>Float</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       <tr>
                           <td><code class="table_code">Output</code></td>
-                          <td>Output specifies the prefix of pXg output files.</td>
-                          <td>Yes</td>
+                          <td>Base output name of pXg.</td>
+                          <td>String</td>
+                          <td><span class="badge badge-yes">Yes</span></td>
                       </tr>
                       </tbody>
                   </table>
@@ -587,7 +631,7 @@
       $('#peptide_index').val('2');
       $('#charge_index').val('12');
       $('#score_index').val('9');
-      $('#output').val('toy_output');
+      $('#output').val('MD55A3_IFN_1');
       $('#memory').val('32');
       $('#thread').val('4');
       $('#FDR').val('0.01');
@@ -632,11 +676,15 @@
 
     function append(stream, line){
 
-      const d = document.createElement('div');
-      d.className = stream;
-      d.textContent = line.replace(/\x1b\[[0-9;]*m/g, ""); // ANSI 제거(옵션)
-      logEl.appendChild(d);
-      logEl.scrollTop = logEl.scrollHeight;
+      if(line != null && line !=""){
+        const d = document.createElement('div');
+        d.className = stream;
+        d.textContent = line.replace(/\x1b\[[0-9;]*m/g, ""); // ANSI 제거(옵션)
+        logEl.appendChild(d);
+        logEl.scrollTop = logEl.scrollHeight;
+
+      }
+ 
     }
 
     
@@ -792,15 +840,23 @@
 
       changeStatus(true);
 
-      const pinFiles = $('#output').val()+".pxg.pin";   // 실제 JAR 출력으로 생성된 pin 파일 경로
-      var folderPath = $('#outputDirName').attr('title')
-      append('info', 'Launching Percolator automatically…');
+      const pinFiles = $('#output').val()+".pXg.pin";   // 실제 JAR 출력으로 생성된 pin 파일 경로
+      var folderPath = $('#outputDirName').attr('title');
+      //append('info', 'Launching Percolator automatically…');
       const opts={
         pinFiles:pinFiles,
         outDir:folderPath,
         cwd:folderPath
       }
-      await window.perc.start(opts);
+
+      try {
+        const info = await window.perc.start(opts);
+        append(`▶ Started pid=${info.pid} cwd=${info.cwd}`);
+      } catch (e) {
+        changeStatus(false);
+        setStatus('Start error: ' + e.message, 'err');
+      }
+      
     }
 
     window.perc.onLog(({ stream, line }) => addPercLog(stream, line));
@@ -829,19 +885,17 @@
         jarPath: jarFile,
         jvmArgs: jvmArgs,
         args: [
-          '--input' , $('#output').val()+".pxg",
+          '--input' , $('#output').val()+".pXg",
           '--target' ,"percolator_out/target.tsv",
           '--decoy' , "percolator_out/decoy.tsv",
           '--fdr' , $('#FDR').val(),
-          '--output' , $('#output').val()+".fdr.tsv"
+          '--output' , $('#output').val()
         ],
         cwd: folderPath    // 필요 시 작업 폴더
       };
 
       try {
-        const info = await window.jarfdr.fdrstart(opts);
-        //append(`▶ Started pid=${info.pid} cwd=${info.cwd}`);
-        
+        const info = await window.jarfdr.fdrstart(opts);        
       } catch (e) {
         changeStatus(false);
         setStatus('Start error: ' + e.message, 'err');

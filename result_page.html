@@ -124,11 +124,11 @@
                   </thead>
                   <tbody>
                   <tr>
-                      <td><a href="#" id="pxgLink" data-path="">pxg.pxg</a></td>
+                      <td><a href="#" id="pXgLink" data-path="">pXg.pXg</a></td>
                       <td>pXg output including all ranked target and decoy matches.</td>
                   </tr>
                   <tr>
-                      <td><a href="#" id="pinLink" data-path="">pXg.pxg.pin</a></td>
+                      <td><a href="#" id="pinLink" data-path="">pXg.pXg.pin</a></td>
                       <td>PIN-formatted pXg output including all ranked target and decoy matches.</td>
                   </tr>
                   <tr>
@@ -136,7 +136,7 @@
                       <td>pXg output containing top-ranked target and decoy matches with their Percolator scores and FDR pass status. This is the main file for downstream analyses.</td>
                   </tr>
                   <tr>
-                      <td><a href="#" id="logLink" data-path="">pxg.log</a></td>
+                      <td><a href="#" id="logLink" data-path="">pXg.log</a></td>
                       <td>pXg execution log.</td>
                   </tr>
                   <tr>
@@ -185,16 +185,16 @@
       const outputDir = params.get("outputDir"); 
 
       // 각 파일명
-      const pxgName = `${outputName}.pxg`;
-      const logName = `${outputName}.pxg.log`;
-      const pinName = `${outputName}.pxg.pin`;
+      const pXgName = `${outputName}.pXg`;
+      const logName = `${outputName}.pXg.log`;
+      const pinName = `${outputName}.pXg.pin`;
       const fdrName = `${outputName}.fdr.tsv`;
       const perclogName = `${outputName}.percolator.log`;
       const fdrlogName = `${outputName}.fdr_control.log`;
 
 
       // href는 file URL, download는 파일명만
-      const pxgHref = makeNativePath(outputDir, pxgName);
+      const pXgHref = makeNativePath(outputDir, pXgName);
       const logHref = makeNativePath(outputDir, logName);
       const pinHref = makeNativePath(outputDir, pinName);
       const fdrHref = makeNativePath(outputDir, fdrName);
@@ -202,10 +202,10 @@
       const fdrlogHref = makeNativePath(outputDir, fdrlogName);
 
 
-      const pxgLink = document.getElementById("pxgLink");
-      pxgLink.dataset.path = pxgHref; 
-      pxgLink.textContent = pxgName;
-      //pxgLink.download = pxgName;
+      const pXgLink = document.getElementById("pXgLink");
+      pXgLink.dataset.path = pXgHref; 
+      pXgLink.textContent = pXgName;
+      //pXgLink.download = pXgName;
 
       const logLink = document.getElementById("logLink");
       logLink.dataset.path = logHref; 
